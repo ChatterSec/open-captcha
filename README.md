@@ -50,3 +50,11 @@ $ sudo apt-get install -y build-essential libxi-dev libglu1-mesa-dev libglew-dev
 * [Python 2.7](https://www.python.org/)
 * [Microsoft Visual Studio](https://www.microsoft.com/en-us/download/details.aspx?id=5555)
 * d3dcompiler_47.dll should be in c:\windows\system32, but if isn't then you can find another copy in the deps/ folder
+
+
+
+--- 
+
+```
+pip install PyOpenGL PyWavefront pygame
+```

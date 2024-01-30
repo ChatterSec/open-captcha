@@ -13,13 +13,13 @@ global.ProgressEvent = class ProgressEvent {
     }
 }
 
-const width = 512,
-  height = 512;
+const width = 512, height = 512;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xFFFFFF);
-const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+camera.position.z = 5;
 
 const light = new THREE.PointLight(0xffffff, 1000)
 light.position.set(2.5, 7.5, 15)
@@ -30,28 +30,22 @@ const renderer = new THREE.WebGLRenderer({
   canvas,
 });
 
-
-camera.position.z = 5;
-
-const loader = new OBJLoader();
-const mltlLoader = new MTLLoader();
-
-mltlLoader.load(
-	// resource URL
-	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/police.mtl',
-	// called when resource is loaded
+const mtlLoader = new MTLLoader();
+mtlLoader.load(
+	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/672009c239df3a1ef141d2626c835ec2e5dc2697/assets/police.mtl',
 	function ( material ) {
-
-        loader.setMaterials(material);
-        loader.load(
-            // resource URL
+        console.log('Loaded material')
+        material.preload();
+        
+        const objLoader = new OBJLoader();
+        objLoader.setMaterials(material);
+        objLoader.load(
             'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/police.obj',
-            // called when resource is loaded
             function ( object ) {
-
+                console.log('Loaded object')
    
                 //console.log(material)
-                console.log(object)
+                // console.log(object)
 
                 //object.children[0].material = material.materials.Material
 
@@ -64,33 +58,19 @@ mltlLoader.load(
                 fs.writeFileSync('./test.png', buffer);
         
             },
-            // called when loading is in progresses
             function ( xhr ) {
-        
                 console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        
             },
-            // called when loading has errors
             function ( error ) {
-        
                 console.log( 'An error happened', error );
-        
             }
         );
 
 	},
-	// called when loading is in progresses
 	function ( xhr ) {
-
 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
 	},
-	// called when loading has errors
 	function ( error ) {
-
-		console.log( 'An error happened' );
-
+		console.log( 'An error happened', error );
 	}
 );
-
-// load a resource

@@ -38,14 +38,14 @@ const mltlLoader = new MTLLoader();
 
 mltlLoader.load(
 	// resource URL
-	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/cars.mtl',
+	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/police.mtl',
 	// called when resource is loaded
 	function ( material ) {
 
         loader.setMaterials(material);
         loader.load(
             // resource URL
-            'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/car.obj',
+            'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/police.obj',
             // called when resource is loaded
             function ( object ) {
 

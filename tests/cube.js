@@ -1,32 +1,20 @@
 const fs = require('fs');
 const THREE = require('three');
 const GIFEncoder = require('gifencoder');
-const {createCanvas} = require('./canvas');
-const {MTLLoader, OBJLoader} = require('three-obj-mtl-loader')
+const {createCanvas} = require('../canvas');
 
-const obj = './assets/test.obj'
-const texture = './assets/cars.mtl'
 
 const width = 512,
   height = 512;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-let mtlLoader = new MTLLoader();
-let objLoader = new OBJLoader();
 
 const canvas = createCanvas(width, height);
 const renderer = new THREE.WebGLRenderer({
   canvas,
 });
 
-mtlLoader.load(obj, (materials) => {
-    materials.preload()
-    objLoader.setMaterials(materials)
-    objLoader.load(texture, (object) => {
-      scene.add(object)
-    })
-  })
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({color: 0x00ff00});

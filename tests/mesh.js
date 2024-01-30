@@ -25,6 +25,10 @@ const light = new THREE.PointLight(0xffffff, 1000)
 light.position.set(2.5, 7.5, 15)
 scene.add(light)
 
+var ambientLight = new THREE.AmbientLight(0xffffff, 1000); // Color: white, Intensity: 1
+scene.add(ambientLight);
+
+
 const canvas = createCanvas(width, height);
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -32,7 +36,7 @@ const renderer = new THREE.WebGLRenderer({
 
 const mtlLoader = new MTLLoader();
 mtlLoader.load(
-	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/672009c239df3a1ef141d2626c835ec2e5dc2697/assets/police.mtl',
+	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/police.mtl',
 	function ( material ) {
         console.log('Loaded material')
         material.preload();
@@ -50,6 +54,12 @@ mtlLoader.load(
                 //object.children[0].material = material.materials.Material
 
                 //console.log(material.materials.Material)
+
+                console.log(object)
+                // rotate object by 90 degrees
+                object.rotation.y = Math.PI / 2;
+                object.rotation.x = Math.PI / 5;
+
                 scene.add( object );
         
                 // export to png

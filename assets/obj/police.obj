@@ -1,6 +1,6 @@
 # Blender v3.0.1 OBJ File: 'Cars.blend'
 # www.blender.org
-mtllib https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/police.mtl
+mtllib https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/mtl/police.mtl
 o Police_Plane.008
 v -1.205267 0.512620 0.448097
 v -0.459713 1.623187 0.470616

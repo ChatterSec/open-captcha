@@ -1,7 +1,9 @@
 const fs = require('fs');
 const THREE = require('three');
 const {createCanvas} = require('../canvas');
+
 const OBJLoader = require('../lib/OBJLoader');
+const MTLLoader = require('../lib/MTLLoader');
 
 global.ProgressEvent = class ProgressEvent {
     constructor(type, {loaded, total}) {
@@ -15,7 +17,13 @@ const width = 512,
   height = 512;
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xFFFFFF);
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+
+
+const light = new THREE.PointLight(0xffffff, 1000)
+light.position.set(2.5, 7.5, 15)
+scene.add(light)
 
 const canvas = createCanvas(width, height);
 const renderer = new THREE.WebGLRenderer({
@@ -23,28 +31,52 @@ const renderer = new THREE.WebGLRenderer({
 });
 
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
 camera.position.z = 5;
 
 const loader = new OBJLoader();
+const mltlLoader = new MTLLoader();
 
-// load a resource
-loader.load(
+mltlLoader.load(
 	// resource URL
-	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/test.obj',
+	'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/cars.mtl',
 	// called when resource is loaded
-	function ( object ) {
+	function ( material ) {
 
-		scene.add( object );
+        loader.setMaterials(material);
+        loader.load(
+            // resource URL
+            'https://raw.githubusercontent.com/NotReeceHarris/open-captcha/main/assets/car.obj',
+            // called when resource is loaded
+            function ( object ) {
 
-        // export to png
-        renderer.render(scene, camera);
-        const buffer = canvas.toBuffer('image/png');
-        fs.writeFileSync('./test.png', buffer);
+   
+                //console.log(material)
+                console.log(object)
+
+                //object.children[0].material = material.materials.Material
+
+                //console.log(material.materials.Material)
+                scene.add( object );
+        
+                // export to png
+                renderer.render(scene, camera);
+                const buffer = canvas.toBuffer('image/png');
+                fs.writeFileSync('./test.png', buffer);
+        
+            },
+            // called when loading is in progresses
+            function ( xhr ) {
+        
+                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+        
+            },
+            // called when loading has errors
+            function ( error ) {
+        
+                console.log( 'An error happened', error );
+        
+            }
+        );
 
 	},
 	// called when loading is in progresses
@@ -60,3 +92,5 @@ loader.load(
 
 	}
 );
+
+// load a resource

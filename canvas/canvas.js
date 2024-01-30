@@ -4,6 +4,12 @@ const EventEmitter = require('events');
 
 const createGLContext = require('gl');
 
+const jsdom = require("jsdom");
+const JSdom = new jsdom.JSDOM();
+
+global.window = JSdom.window;
+global.document = JSdom.window.document;
+
 
 const _ctx = Symbol('ctx');
 

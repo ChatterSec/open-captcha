@@ -1,8 +1,8 @@
+
 const fs = require('fs');
 const THREE = require('three');
 const GIFEncoder = require('gifencoder');
 const {createCanvas} = require('../canvas');
-
 
 const width = 512,
   height = 512;

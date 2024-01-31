@@ -13,7 +13,7 @@ function encrypt(text: string, key: Buffer, iv: Buffer): string {
     decrypted += decipher.final('utf-8');
     return decrypted;
   }
-
+ 
 export default class captcha {
     #_encryptionKey: Buffer;
     #_encryptionIv: Buffer;

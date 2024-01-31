@@ -1,0 +1,41 @@
+{
+    "car": {
+        "model": "car",
+        "rotation_range": {
+            "y": {
+                "min": 1.2,
+                "max": 6
+            },
+            "x": {
+                "min": 4,
+                "max": 20
+            }
+        }
+    },
+    "helicopter": {
+        "model": "helicopter",
+        "rotation_range": {
+            "y": {
+                "min": 1.2,
+                "max": 6
+            },
+            "x": {
+                "min": 4,
+                "max": 20
+            }
+        }
+    },
+    "pawn": {
+        "model": "pawn",
+        "rotation_range": {
+            "y": {
+                "min": 1.2,
+                "max": 6
+            },
+            "x": {
+                "min": 4,
+                "max": 20
+            }
+        }
+    }
+} 

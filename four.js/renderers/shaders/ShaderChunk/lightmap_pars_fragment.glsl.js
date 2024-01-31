@@ -1,0 +1,8 @@
+module.exports = /* glsl */`
+#ifdef USE_LIGHTMAP
+
+	uniform sampler2D lightMap;
+	uniform float lightMapIntensity;
+
+#endif
+`;

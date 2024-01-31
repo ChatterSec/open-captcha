@@ -1,27 +1,7 @@
 # open-captcha
 open source captcha
 
-
 ![Process diagram](./flowchart.png)
-
-
-- Make sure python3 is installed as "python"
-```
-sudo apt install python-is-python3
-
-// OR Place this into ~/.bashrc or ~/.bash_aliases file:
-
-alias python=python3
-
-```
-
-```
-sudo apt-get install libxi-dev
-```
-
-```
-$ sudo apt-get install -y build-essential libxi-dev libglu1-mesa-dev libglew-dev pkg-config
-```
 
 ## System dependencies
 
@@ -42,7 +22,7 @@ In most cases installing `headless-gl` from npm should just work.  However, if y
 * [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/)
 
 ```
-$ sudo apt-get install -y build-essential libxi-dev libglu1-mesa-dev libglew-dev pkg-config
+$ sudo apt-get install -y build-essential libxi-dev libglu1-mesa-dev libglew-dev pkg-config python-is-python3
 ```
 
 #### Windows

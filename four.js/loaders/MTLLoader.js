@@ -352,7 +352,6 @@ class MaterialCreator {
 			console.log('Resolve URL:', resolveURL( scope.baseUrl, texParams.url ))
 			const map = await scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ));
 
-			console.log('map:', map)
 
 			map.repeat.copy( texParams.scale );
 			map.offset.copy( texParams.offset );
@@ -550,7 +549,6 @@ class MaterialCreator {
 
 		const loaderPromise = new Promise(async res => {
 			await loader.load( url, (data) => {
-				console.log(data)
 				res(data)
 			}, onProgress, onError );
 		})

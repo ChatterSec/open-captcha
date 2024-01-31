@@ -16,13 +16,13 @@ camera.position.z = 5;
 const geometry = new FOUR.BoxGeometry(1, 1, 1);
 const material = new FOUR.MeshBasicMaterial({color: 0x00ff00});
 const cube = new FOUR.Mesh(geometry, material);
-cube.position.z = 2
+cube.position.z = 1
 cube.position.y = 1
 cube.position.x = 0
 //scene.add(cube);
 
-const light = new FOUR.PointLight(0x404040, 10000)
-light.position.set(20, 5, 10)
+const light = new FOUR.PointLight(0x404040, 5, 10000000)
+light.position.set(-5, 15, 25)
 light.castShadow = true
 light.power = 1000000
 scene.add(light)
@@ -41,26 +41,29 @@ const renderImage = () => {
 
 const mtlLoader = new MTLLoader();
 mtlLoader.load(
-	'./models/police.mtl',
+	'./models/car.mtl',
 	async function ( material ) {
         console.log('Loaded material')
-        await material.preload();
+        material.preload();
+        material.materials.Material.texture = new FOUR.DataTexture('data:image/png;base64,' + fs.readFileSync('./models/colors.jpg').toString('base64'), 596, 602)
+        console.log(material.materials.Material.texture)
         
         const objLoader = new OBJLoader();
         objLoader.setMaterials(material);
         objLoader.load(
-            './models/police.obj',
+            './models/car.obj',
             function ( object ) {
                 console.log('Loaded object')
                 const mesh = object.children[0]
-                //mesh.material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-                mesh.material = material.materials.Material
-                    
-                // console.log(mesh.material.map)
 
-                mesh.rotation.y = Math.PI / 2;
-                mesh.rotation.x = Math.PI / 5;
-                //mesh.rotation.z = Math.PI / 5;
+
+
+                mesh.material.texture = new FOUR.DataTexture('data:image/png;base64,' + fs.readFileSync('./models/colors.jpg').toString('base64'), 596, 602)
+
+                //console.log(mesh.material.texture)
+
+                mesh.rotation.y = Math.PI / 1.3;
+                mesh.rotation.x = Math.PI / 9;
 
                 mesh.position.y = -0.5;
                 mesh.position.z = 0.5;

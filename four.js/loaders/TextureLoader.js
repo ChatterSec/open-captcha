@@ -19,9 +19,6 @@ class TextureLoader extends Loader {
 		loader.setPath( this.path );
 
 		await loader.load( url, function ( image ) {
-
-			console.log('Texture loader image:', image)
-
 			texture.image = image;
 			texture.needsUpdate = true;
 

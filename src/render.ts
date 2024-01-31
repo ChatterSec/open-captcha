@@ -1,78 +1,76 @@
-import * as fs from 'fs';
-
 const FOUR = require('../../four.js/Four');
 const { createCanvas } = require('../../canvas');
 const { OBJLoader } = require('../../four.js/loaders/OBJLoader.js');
 const { MTLLoader } = require('../../four.js/loaders/MTLLoader.js');
-const objectsData = require('../objects.json');
 
-
-const width = 512, height = 512;
-
-function getRandomNumberBetween(x: number, y: number): number {
-    return Math.floor(Math.random() * (y - x + 1)) + x;
+interface ObjectData {
+    obj: string;
+    mtl: string;
+    newmtl_replace: string;
+    camera: number;
+    rotation: {
+        y: number;
+        x: number;
+    };
+    colour: {
+        Ka: number[];
+        Kd: number[];
+        Ks: number[];
+        Ke: number[];
+    };
 }
 
-export function render(object: string, callback: Function) {
+const width = 512;
+const height = 512;
 
-    const objectData = objectsData[object]
-    console.log(objectData)
-    console.log(getRandomNumberBetween(objectData['rotation_range']['y']['min'], objectData['rotation_range']['y']['max']))
+export function render(objectData: ObjectData, callback: (buffer: Buffer) => void): void {
 
-    const scene = new FOUR.Scene();
-    const camera = new FOUR.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 4;
-
-    // Lighting
-    const light = new FOUR.PointLight(0x404040, 5, 10000000)
-    light.position.set(-5, 15, 25)
-    light.castShadow = true
-    light.power = 1000000
-    scene.add(light)
+    const scene = createScene();
+    const camera = createCamera(objectData.camera);
+    const light = createLight();
+    scene.add(light);
 
     const canvas = createCanvas(width, height);
-    const renderer = new FOUR.WebGLRenderer({
-        canvas,
-        alpha: true,
-    });
+    const renderer = new FOUR.WebGLRenderer({ canvas, alpha: true, precision: 'lowp' });
 
     const mtlLoader = new MTLLoader();
+    mtlLoader.load(objectData, async (material: any) => {
+        material.preload();
+        const objLoader = new OBJLoader();
+        objLoader.setMaterials(material);
 
-    mtlLoader.load(
-        `./models/${objectData.model}.mtl`,
-        async function (material: any) {
+        objLoader.load(`./models/${objectData.obj}`, (object: any) => {
+            const mesh = object.children[0];
+            mesh.rotation.y = objectData.rotation.y;
+            mesh.rotation.x = objectData.rotation.x;
 
-            material.preload();
-            const objLoader = new OBJLoader();
-            objLoader.setMaterials(material);
+            scene.add(mesh);
+            renderer.render(scene, camera);
+            const buffer = canvas.toBuffer('image/png');
+            callback(buffer);
+        }, undefined, handleError);
+    }, undefined, handleError);
+}
 
-            objLoader.load(
-                `./models/${objectData.model}.obj`,
-                function (object: any) {
-                    console.log('Loaded object')
-                    const mesh = object.children[0]
+function createScene(): any {
+    return new FOUR.Scene();
+}
 
-                    mesh.rotation.y = Math.PI / getRandomNumberBetween(objectData['rotation_range']['y']['min'], objectData['rotation_range']['y']['max']);
-                    mesh.rotation.x = Math.PI / getRandomNumberBetween(objectData['rotation_range']['x']['min'], objectData['rotation_range']['x']['max']);
+function createCamera(cameraPosition: number): any {
+    const camera = new FOUR.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = cameraPosition;
+    camera.position.y = 1;
+    return camera;
+}
 
-                    mesh.position.y = -0.5;
-                    mesh.position.z = 0.5;
-                    mesh.position.x = 0.2;
+function createLight(): any {
+    const light = new FOUR.PointLight(0x404040, 5, 100);
+    light.position.set(-5, 15, 25);
+    light.castShadow = true;
+    light.power = 1000000;
+    return light;
+}
 
-                    scene.add(mesh);
-                    renderer.render(scene, camera);
-                    const buffer = canvas.toBuffer('image/png');
-                    callback(buffer)
-                },
-                () => { },
-                function (error: any) {
-                    console.log('An error happened', error);
-                }
-            );
-        },
-        () => { },
-        function (error: any) {
-            console.log('An error happened', error);
-        }
-    );
+function handleError(error: any): void {
+    console.error('An error happened', error);
 }

@@ -1,60 +1,56 @@
-const {Loader} = require('./Loader.js');
+const { Loader } = require('./Loader.js');
 const fs = require('fs').promises;
-
-const loading = {};
 
 class FileLoader extends Loader {
     constructor(manager) {
         super(manager);
     }
 
-    load(url = '', onLoad, onProgress, onError) {
-		// console.log('Requested file', url)
-        url = this.manager.resolveURL(url);
-
-        if (loading[url]) {
-            loading[url].push({ onLoad, onProgress, onError });
-            return;
-        }
-
-        loading[url] = [{ onLoad, onProgress, onError }];
-
-        fs.readFile(url)
-            .then(response => response.toString())
-            .then(data => {
-                const callbacks = loading[url];
-                delete loading[url];
-
-                callbacks.forEach(callback => callback.onLoad?.(data));
-            })
-            .catch(err => {
-                const callbacks = loading[url];
-                delete loading[url];
-
-                if (!callbacks) {
-                    this.manager.itemError(url);
-                    throw err;
-                }
-
-                callbacks.forEach(callback => callback.onError?.(err));
-                this.manager.itemError(url);
-            })
-            .finally(() => {
-                this.manager.itemEnd(url);
-            });
-
+    async load(file = '', onLoad, onProgress, onError) {
+        let url = this.getUrl(file);
         this.manager.itemStart(url);
+
+        try {
+            let data = await this.readFile(url);
+
+            if (typeof file === 'object') {
+                data = this.modifyData(data, file);
+            }
+
+            this.callBacks({ onLoad, onProgress, onError }, data);
+        } catch (error) {
+            onError?.(error);
+        } finally {
+            this.manager.itemEnd(url);
+        }
     }
 
-    setResponseType(value) {
-        this.responseType = value;
-        return this;
+    getUrl(file) {
+        let url = typeof file === 'object' ? `./models/${file.mtl}` : file;
+        return this.manager.resolveURL(url);
     }
 
-    setMimeType(value) {
-        this.mimeType = value;
-        return this;
+    async readFile(url) {
+        const response = await fs.readFile(url);
+        return response.toString();
+    }
+
+    modifyData(data, file) {
+        const lines = data.split('\n');
+        const colourLine = lines.find(line => line.startsWith('newmtl colour'));
+        const colour_line_index = lines.indexOf(colourLine);
+
+        lines[colour_line_index+2] = `Kd ${file.colour.Kd.join(' ')}`;
+        lines[colour_line_index+3] = `Ka ${file.colour.Ka.join(' ')}`;
+        lines[colour_line_index+4] = `Ks ${file.colour.Ks.join(' ')}`;
+        lines[colour_line_index+5] = `Ke ${file.colour.Ke.join(' ')}`;
+
+        return lines.join('\n');
+    }
+
+    callBacks(callbacks, data) {
+        callbacks.onLoad?.(data);
     }
 }
 
-module.exports = {FileLoader}
+module.exports = { FileLoader }

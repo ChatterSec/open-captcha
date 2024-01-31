@@ -42,7 +42,6 @@ const { PointLight } = require('../lights/PointLight.js');
 const { DirectionalLight } = require('../lights/DirectionalLight.js');
 const { AmbientLight } = require('../lights/AmbientLight.js');
 const { RectAreaLight } = require('../lights/RectAreaLight.js');
-const { LightProbe } = require('../lights/LightProbe.js');
 const { OrthographicCamera } = require('../cameras/OrthographicCamera.js');
 const { PerspectiveCamera } = require('../cameras/PerspectiveCamera.js');
 const { Scene } = require('../scenes/Scene.js');
@@ -52,7 +51,6 @@ const { Source } = require('../textures/Source.js');
 const { DataTexture } = require('../textures/DataTexture.js');
 const { ImageLoader } = require('./ImageLoader.js');
 const { LoadingManager } = require('./LoadingManager.js');
-const { AnimationClip } = require('../animation/AnimationClip.js');
 const { MaterialLoader } = require('./MaterialLoader.js');
 const { LoaderUtils } = require('./LoaderUtils.js');
 const { BufferGeometryLoader } = require('./BufferGeometryLoader.js');
@@ -338,28 +336,6 @@ class ObjectLoader extends Loader {
 		}
 
 		return materials;
-
-	}
-
-	parseAnimations( json ) {
-
-		const animations = {};
-
-		if ( json !== undefined ) {
-
-			for ( let i = 0; i < json.length; i ++ ) {
-
-				const data = json[ i ];
-
-				const clip = AnimationClip.parse( data );
-
-				animations[ clip.uuid ] = clip;
-
-			}
-
-		}
-
-		return animations;
 
 	}
 
@@ -855,12 +831,6 @@ class ObjectLoader extends Loader {
 			case 'HemisphereLight':
 
 				object = new HemisphereLight( data.color, data.groundColor, data.intensity );
-
-				break;
-
-			case 'LightProbe':
-
-				object = new LightProbe().fromJSON( data );
 
 				break;
 

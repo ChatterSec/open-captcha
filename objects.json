@@ -1,41 +1,56 @@
 {
     "car": {
-        "model": "car",
+        "obj": "/car/car.obj",
+        "mtl": "/car/car.mtl",
+        "newmtl_replace": "color",
+        "camera": 5,
         "rotation_range": {
             "y": {
-                "min": 1.2,
-                "max": 6
+                "min": 0,
+                "max": 6.283185307179586
             },
             "x": {
-                "min": 4,
-                "max": 20
+                "min": 0.7853981633974483,
+                "max": 0.15707963267948966
             }
-        }
-    },
-    "helicopter": {
-        "model": "helicopter",
-        "rotation_range": {
-            "y": {
-                "min": 1.2,
-                "max": 6
+        },
+        "colours": [
+            {
+                "name": "red",
+                "r": 128,
+                "g": 35,
+                "b": 35
             },
-            "x": {
-                "min": 4,
-                "max": 20
-            }
-        }
-    },
-    "pawn": {
-        "model": "pawn",
-        "rotation_range": {
-            "y": {
-                "min": 1.2,
-                "max": 6
+            {
+                "name": "green",
+                "r": 108,
+                "g": 187,
+                "b": 21
             },
-            "x": {
-                "min": 4,
-                "max": 20
+            {
+                "name": "blue",
+                "r": 26,
+                "g": 103,
+                "b": 192
+            },
+            {
+                "name": "yellow",
+                "r": 223,
+                "g": 207,
+                "b": 25
+            },
+            {
+                "name": "white",
+                "r": 224,
+                "g": 224,
+                "b": 224
+            },
+            {
+                "name": "black",
+                "r": 26,
+                "g": 26,
+                "b": 26
             }
-        }
+        ]
     }
 } 

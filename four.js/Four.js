@@ -40,7 +40,6 @@ const { CubeTexture } = require('./textures/CubeTexture.js');
 const { CanvasTexture } = require('./textures/CanvasTexture.js');
 const { DepthTexture } = require('./textures/DepthTexture.js');
 const { Texture } = require('./textures/Texture.js');
-const { AnimationLoader } = require('./loaders/AnimationLoader.js');
 const { CompressedTextureLoader } = require('./loaders/CompressedTextureLoader.js');
 const { CubeTextureLoader } = require('./loaders/CubeTextureLoader.js');
 const { DataTextureLoader } = require('./loaders/DataTextureLoader.js');
@@ -54,8 +53,6 @@ const { ImageBitmapLoader } = require('./loaders/ImageBitmapLoader.js');
 const { FileLoader } = require('./loaders/FileLoader.js');
 const { Loader } = require('./loaders/Loader.js');
 const { LoaderUtils } = require('./loaders/LoaderUtils.js');
-const { Cache } = require('./loaders/Cache.js');
-const { AudioLoader } = require('./loaders/AudioLoader.js');
 const { SpotLight } = require('./lights/SpotLight.js');
 const { PointLight } = require('./lights/PointLight.js');
 const { RectAreaLight } = require('./lights/RectAreaLight.js');
@@ -63,32 +60,12 @@ const { HemisphereLight } = require('./lights/HemisphereLight.js');
 const { DirectionalLight } = require('./lights/DirectionalLight.js');
 const { AmbientLight } = require('./lights/AmbientLight.js');
 const { Light } = require('./lights/Light.js');
-const { LightProbe } = require('./lights/LightProbe.js');
 const { StereoCamera } = require('./cameras/StereoCamera.js');
 const { PerspectiveCamera } = require('./cameras/PerspectiveCamera.js');
 const { OrthographicCamera } = require('./cameras/OrthographicCamera.js');
 const { CubeCamera } = require('./cameras/CubeCamera.js');
 const { ArrayCamera } = require('./cameras/ArrayCamera.js');
 const { Camera } = require('./cameras/Camera.js');
-const { AudioListener } = require('./audio/AudioListener.js');
-const { PositionalAudio } = require('./audio/PositionalAudio.js');
-const { AudioContext } = require('./audio/AudioContext.js');
-const { AudioAnalyser } = require('./audio/AudioAnalyser.js');
-const { Audio } = require('./audio/Audio.js');
-const { VectorKeyframeTrack } = require('./animation/tracks/VectorKeyframeTrack.js');
-const { StringKeyframeTrack } = require('./animation/tracks/StringKeyframeTrack.js');
-const { QuaternionKeyframeTrack } = require('./animation/tracks/QuaternionKeyframeTrack.js');
-const { NumberKeyframeTrack } = require('./animation/tracks/NumberKeyframeTrack.js');
-const { ColorKeyframeTrack } = require('./animation/tracks/ColorKeyframeTrack.js');
-const { BooleanKeyframeTrack } = require('./animation/tracks/BooleanKeyframeTrack.js');
-const { PropertyMixer } = require('./animation/PropertyMixer.js');
-const { PropertyBinding } = require('./animation/PropertyBinding.js');
-const { KeyframeTrack } = require('./animation/KeyframeTrack.js');
-const { AnimationUtils } = require('./animation/AnimationUtils.js');
-const { AnimationObjectGroup } = require('./animation/AnimationObjectGroup.js');
-const { AnimationMixer } = require('./animation/AnimationMixer.js');
-const { AnimationClip } = require('./animation/AnimationClip.js');
-const { AnimationAction } = require('./animation/AnimationAction.js');
 const { RenderTarget } = require('./core/RenderTarget.js');
 const { Uniform } = require('./core/Uniform.js');
 const { UniformsGroup } = require('./core/UniformsGroup.js');
@@ -201,7 +178,6 @@ module.exports = {
 	CanvasTexture,
 	DepthTexture,
 	Texture,
-	AnimationLoader,
 	CompressedTextureLoader,
 	CubeTextureLoader,
 	DataTextureLoader,
@@ -216,8 +192,6 @@ module.exports = {
 	FileLoader,
 	Loader,
 	LoaderUtils,
-	Cache,
-	AudioLoader,
 	SpotLight,
 	PointLight,
 	RectAreaLight,
@@ -225,32 +199,12 @@ module.exports = {
 	DirectionalLight,
 	AmbientLight,
 	Light,
-	LightProbe,
 	StereoCamera,
 	PerspectiveCamera,
 	OrthographicCamera,
 	CubeCamera,
 	ArrayCamera,
 	Camera,
-	AudioListener,
-	PositionalAudio,
-	AudioContext,
-	AudioAnalyser,
-	Audio,
-	VectorKeyframeTrack,
-	StringKeyframeTrack,
-	QuaternionKeyframeTrack,
-	NumberKeyframeTrack,
-	ColorKeyframeTrack,
-	BooleanKeyframeTrack,
-	PropertyMixer,
-	PropertyBinding,
-	KeyframeTrack,
-	AnimationUtils,
-	AnimationObjectGroup,
-	AnimationMixer,
-	AnimationClip,
-	AnimationAction,
 	RenderTarget,
 	Uniform,
 	UniformsGroup,

@@ -1,21 +1,19 @@
 const {
 	BufferGeometry,
+	FileLoader,
 	Float32BufferAttribute,
 	Group,
 	LineBasicMaterial,
 	LineSegments,
+	Loader,
 	Material,
 	Mesh,
 	MeshPhongMaterial,
 	Points,
 	PointsMaterial,
 	Vector3,
-	Loader,
 	Color
-} = require('../Three');
-
-
-const FileLoader = require( './FileLoader' );
+} = require('../Four');
 
 // o object_name | g group_name
 const _object_pattern = /^[og]\s*(.+)?/;
@@ -435,7 +433,7 @@ function ParserState() {
 
 //
 
-module.exports = class OBJLoader extends Loader {
+class OBJLoader extends Loader {
 
 	constructor( manager ) {
 
@@ -452,6 +450,7 @@ module.exports = class OBJLoader extends Loader {
 		const loader = new FileLoader( this.manager );
 		loader.setPath( this.path );
 		loader.setRequestHeader( this.requestHeader );
+		loader.setWithCredentials( this.withCredentials );
 		loader.load( url, function ( text ) {
 
 			try {
@@ -902,3 +901,5 @@ module.exports = class OBJLoader extends Loader {
 	}
 
 }
+
+module.exports = { OBJLoader };

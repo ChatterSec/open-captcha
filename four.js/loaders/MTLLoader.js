@@ -1,23 +1,22 @@
 const {
 	Color,
+	DefaultLoadingManager,
+	FileLoader,
 	FrontSide,
+	Loader,
 	LoaderUtils,
-    Loader,
 	MeshPhongMaterial,
 	RepeatWrapping,
+	TextureLoader,
 	Vector2,
 	SRGBColorSpace
-} = require( '../Three' );
-
-const TextureLoader = require( './TextureLoader' );
-const FileLoader = require( './FileLoader' );
-const DefaultLoadingManager = require( './LoadingManager' );
+} = require('../Four');
 
 /**
  * Loads a Wavefront .mtl file specifying materials
  */
 
-module.exports = class MTLLoader extends Loader {
+class MTLLoader extends Loader {
 
 	constructor( manager ) {
 
@@ -46,6 +45,8 @@ module.exports = class MTLLoader extends Loader {
 
 		const loader = new FileLoader( this.manager );
 		loader.setPath( this.path );
+		loader.setRequestHeader( this.requestHeader );
+		loader.setWithCredentials( this.withCredentials );
 		loader.load( url, function ( text ) {
 
 			try {
@@ -308,11 +309,11 @@ class MaterialCreator {
 
 	}
 
-	async create( materialName ) {
+	create( materialName ) {
 
 		if ( this.materials[ materialName ] === undefined ) {
 
-			await this.createMaterial_( materialName );
+			this.createMaterial_( materialName );
 
 		}
 
@@ -320,7 +321,7 @@ class MaterialCreator {
 
 	}
 
-	async createMaterial_( materialName ) {
+	createMaterial_( materialName ) {
 
 		// Create material
 
@@ -333,12 +334,24 @@ class MaterialCreator {
 
 		};
 
-		async function setMapForType( mapType, value ) {
+		function resolveURL( baseUrl, url ) {
+
+			if ( typeof url !== 'string' || url === '' )
+				return '';
+
+			// Absolute URL
+			if ( /^https?:\/\//i.test( url ) ) return url;
+
+			return baseUrl + url;
+
+		}
+
+		function setMapForType( mapType, value ) {
 
 			if ( params[ mapType ] ) return; // Keep the first encountered texture
 
 			const texParams = scope.getTextureParams( value, params );
-			const map = await scope.loadTexture( texParams.url );
+			const map = scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ) );
 
 			map.repeat.copy( texParams.scale );
 			map.offset.copy( texParams.offset );
@@ -392,8 +405,8 @@ class MaterialCreator {
 				case 'map_kd':
 
 					// Diffuse texture map
-					console.log('Loading map_kd')
-					await setMapForType( 'map', value );
+
+					setMapForType( 'map', value );
 
 					break;
 
@@ -528,15 +541,20 @@ class MaterialCreator {
 
 	}
 
-	async loadTexture( url, mapping, onLoad, onProgress, onError ) {
-
-		console.log('Loading texture from', url)
+	loadTexture( url, mapping, onLoad, onProgress, onError ) {
 
 		const manager = ( this.manager !== undefined ) ? this.manager : DefaultLoadingManager;
-		let loader = new TextureLoader( manager );
+		let loader = manager.getHandler( url );
 
-		const texture = await loader.load( url, onLoad, onProgress, onError );
-		console.log(texture)
+		if ( loader === null ) {
+
+			loader = new TextureLoader( manager );
+
+		}
+
+		if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
+
+		const texture = loader.load( url, onLoad, onProgress, onError );
 
 		if ( mapping !== undefined ) texture.mapping = mapping;
 
@@ -545,3 +563,5 @@ class MaterialCreator {
 	}
 
 }
+
+module.exports = { MTLLoader };

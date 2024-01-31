@@ -1,6 +1,9 @@
 const fs = require('fs');
-const FOUR = require('../four.js/Three');
+const FOUR = require('../four.js/Four');
 const {createCanvas} = require('../canvas');
+
+const { OBJLoader } = require('../four.js/loaders/OBJLoader.js');
+const { MTLLoader } = require('../four.js/loaders/MTLLoader.js');
 
 const width = 512, height = 512;
 
@@ -32,7 +35,7 @@ const renderImage = () => {
 
 const mtlLoader = new MTLLoader();
 mtlLoader.load(
-	'./assets/mtl/police.mtl',
+	'./models/police.mtl',
 	async function ( material ) {
         console.log('Loaded material')
         await material.preload();
@@ -42,7 +45,7 @@ mtlLoader.load(
         const objLoader = new OBJLoader();
         objLoader.setMaterials(material);
         objLoader.load(
-            './assets/obj/police.obj',
+            './models/police.obj',
             function ( object ) {
                 console.log('Loaded object')
                 const mesh = object.children[0]

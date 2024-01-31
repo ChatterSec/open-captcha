@@ -45,9 +45,7 @@ const { CompressedTextureLoader } = require('./loaders/CompressedTextureLoader.j
 const { CubeTextureLoader } = require('./loaders/CubeTextureLoader.js');
 const { DataTextureLoader } = require('./loaders/DataTextureLoader.js');
 const { TextureLoader } = require('./loaders/TextureLoader.js');
-const { MTLLoader } = require('./loaders/MTLLoader.js');
 const { ObjectLoader } = require('./loaders/ObjectLoader.js');
-const { OBJLoader } = require('./loaders/OBJLoader.js');
 const { MaterialLoader } = require('./loaders/MaterialLoader.js');
 const { BufferGeometryLoader } = require('./loaders/BufferGeometryLoader.js');
 const { DefaultLoadingManager, LoadingManager } = require('./loaders/LoadingManager.js');
@@ -160,7 +158,6 @@ const { createCanvasElement } = require('./utils.js');
 
 module.exports = {
 	...require('./constants.js'),
-	...require('./Three.Legacy.js'),
 	...require('./core/BufferAttribute.js'),
 	...require('./geometries/Geometries.js'),
 	...require('./materials/Materials.js'),
@@ -209,9 +206,7 @@ module.exports = {
 	CubeTextureLoader,
 	DataTextureLoader,
 	TextureLoader,
-	MTLLoader,
 	ObjectLoader,
-	OBJLoader,
 	MaterialLoader,
 	BufferGeometryLoader,
 	DefaultLoadingManager,
@@ -322,26 +317,4 @@ module.exports = {
 	PMREMGenerator,
 	WebGLUtils,
 	createCanvasElement,
-}
-
-if ( typeof __THREE_DEVTOOLS__ !== 'undefined' ) {
-
-	__THREE_DEVTOOLS__.dispatchEvent( new CustomEvent( 'register', { detail: {
-		revision: REVISION,
-	} } ) );
-
-}
-
-if ( typeof window !== 'undefined' ) {
-
-	if ( window.__THREE__ ) {
-
-		console.warn( 'WARNING: Multiple instances of Three.js being imported.' );
-
-	} else {
-
-		window.__THREE__ = REVISION;
-
-	}
-
 }

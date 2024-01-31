@@ -2,7 +2,7 @@ const { render } = require('../dist/src/render');
 const { writeFileSync, readFileSync } = require('fs');
 const sharp = require('sharp');
  
-const object = 'pawn';
+const object = 'car';
 
 render(object, (buffer) => {
 
@@ -10,7 +10,7 @@ render(object, (buffer) => {
 
     sharp(imageXBuffer)
     .composite([{ input: buffer, blend: 'over' }])
-    .toFile('test.2.jpg', (err) => {
+    .toFile('./tests/complete.jpg', (err) => {
         if (err) {
             console.error(err);
         } else {
@@ -18,6 +18,6 @@ render(object, (buffer) => {
         }
     });
 
-    writeFileSync('./test.png', buffer);
+    writeFileSync('./tests/bare.png', buffer);
     console.log('Generated image')
 }) 

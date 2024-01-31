@@ -114,6 +114,8 @@ class LoadingManager {
 
 		this.getHandler = function ( file ) {
 
+			console.log('Manager getHandler called:', file, handlers)
+
 			for ( let i = 0, l = handlers.length; i < l; i += 2 ) {
 
 				const regex = handlers[ i ];

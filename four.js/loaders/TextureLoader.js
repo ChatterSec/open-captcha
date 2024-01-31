@@ -10,15 +10,17 @@ class TextureLoader extends Loader {
 
 	}
 
-	load( url, onLoad, onProgress, onError ) {
+	async load( url, onLoad, onProgress, onError ) {
+		console.log('Called texture loader load')
 
 		const texture = new Texture();
 
 		const loader = new ImageLoader( this.manager );
-		loader.setCrossOrigin( this.crossOrigin );
 		loader.setPath( this.path );
 
-		loader.load( url, function ( image ) {
+		await loader.load( url, function ( image ) {
+
+			console.log('Texture loader image:', image)
 
 			texture.image = image;
 			texture.needsUpdate = true;

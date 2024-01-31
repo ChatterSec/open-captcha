@@ -92,8 +92,10 @@ class Source {
 
 function serializeImage( image ) {
 
+	console.log('Serialize Image:', image)
+
 	if ( ( typeof HTMLImageElement !== 'undefined' && image instanceof HTMLImageElement ) ||
-		( typeof HTMLCanvasElement !== 'undefined' && image instanceof HTMLCanvasElement ) ||
+		( typeof HTMLCanvasElement !== 'undefined' && image instanceof Object ) ||
 		( typeof ImageBitmap !== 'undefined' && image instanceof ImageBitmap ) ) {
 
 		// default images

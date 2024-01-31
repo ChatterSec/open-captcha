@@ -19,7 +19,13 @@ const cube = new FOUR.Mesh(geometry, material);
 cube.position.z = 2
 cube.position.y = 1
 cube.position.x = 0
-scene.add(cube);
+//scene.add(cube);
+
+const light = new FOUR.PointLight(0x404040, 10000)
+light.position.set(20, 5, 10)
+light.castShadow = true
+light.power = 1000000
+scene.add(light)
 
 const canvas = createCanvas(width, height);
 const renderer = new FOUR.WebGLRenderer({
@@ -39,8 +45,6 @@ mtlLoader.load(
 	async function ( material ) {
         console.log('Loaded material')
         await material.preload();
-
-        await new Promise(res=>setTimeout(res, 1000))
         
         const objLoader = new OBJLoader();
         objLoader.setMaterials(material);

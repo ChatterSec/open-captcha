@@ -46,7 +46,6 @@ class MTLLoader extends Loader {
 		const loader = new FileLoader( this.manager );
 		loader.setPath( this.path );
 		loader.setRequestHeader( this.requestHeader );
-		loader.setWithCredentials( this.withCredentials );
 		loader.load( url, function ( text ) {
 
 			try {
@@ -336,22 +335,24 @@ class MaterialCreator {
 
 		function resolveURL( baseUrl, url ) {
 
-			if ( typeof url !== 'string' || url === '' )
+			if ( typeof url !== 'string' || url === '' ) {
 				return '';
+			}
 
-			// Absolute URL
-			if ( /^https?:\/\//i.test( url ) ) return url;
-
-			return baseUrl + url;
-
+			return (baseUrl + url).replace('/./', '/');
 		}
 
-		function setMapForType( mapType, value ) {
+		async function setMapForType( mapType, value ) {
+
+			console.log('Called setMapForType:', mapType, value,)
 
 			if ( params[ mapType ] ) return; // Keep the first encountered texture
 
 			const texParams = scope.getTextureParams( value, params );
-			const map = scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ) );
+			console.log('Resolve URL:', resolveURL( scope.baseUrl, texParams.url ))
+			const map = await scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ));
+
+			console.log('map:', map)
 
 			map.repeat.copy( texParams.scale );
 			map.offset.copy( texParams.offset );
@@ -375,6 +376,8 @@ class MaterialCreator {
 			let n;
 
 			if ( value === '' ) continue;
+
+			console.log('Found map:', prop.toLowerCase(), '>', value)
 
 			switch ( prop.toLowerCase() ) {
 
@@ -405,7 +408,6 @@ class MaterialCreator {
 				case 'map_kd':
 
 					// Diffuse texture map
-
 					setMapForType( 'map', value );
 
 					break;
@@ -541,22 +543,19 @@ class MaterialCreator {
 
 	}
 
-	loadTexture( url, mapping, onLoad, onProgress, onError ) {
+	async loadTexture( url, mapping, onLoad, onProgress, onError ) {
 
-		const manager = ( this.manager !== undefined ) ? this.manager : DefaultLoadingManager;
-		let loader = manager.getHandler( url );
+		console.log('Loading texture:', url)
+		const loader = new TextureLoader( this.manager );
 
-		if ( loader === null ) {
+		const loaderPromise = new Promise(async res => {
+			await loader.load( url, (data) => {
+				console.log(data)
+				res(data)
+			}, onProgress, onError );
+		})
 
-			loader = new TextureLoader( manager );
-
-		}
-
-		if ( loader.setCrossOrigin ) loader.setCrossOrigin( this.crossOrigin );
-
-		const texture = loader.load( url, onLoad, onProgress, onError );
-
-		if ( mapping !== undefined ) texture.mapping = mapping;
+		const texture = await loaderPromise
 
 		return texture;
 

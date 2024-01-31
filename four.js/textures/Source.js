@@ -92,7 +92,7 @@ class Source {
 
 function serializeImage( image ) {
 
-	console.log('Serialize Image:', image)
+	// console.log('Serialize Image:', image)
 
 	if ( ( typeof HTMLImageElement !== 'undefined' && image instanceof HTMLImageElement ) ||
 		( typeof HTMLCanvasElement !== 'undefined' && image instanceof Object ) ||

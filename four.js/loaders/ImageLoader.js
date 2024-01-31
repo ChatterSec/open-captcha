@@ -8,7 +8,7 @@ class ImageLoader extends Loader {
   }
 
   async load(url, onLoad, onProgress, onError) {
-	console.log('ImageLoader Requested:', url);
+	// console.log('ImageLoader Requested:', url);
 	const scope = this;
   
 	const imageData = new Promise((res) => {

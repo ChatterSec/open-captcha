@@ -10,8 +10,9 @@
       "incremental": true,
       "noEmitOnError": true,
       "declaration": true,
-      "sourceMap": true
+      "sourceMap": true,
+      "resolveJsonModule": true
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "four.js/four.d.ts", "objects.json"],
     "exclude": ["node_modules"]
 }

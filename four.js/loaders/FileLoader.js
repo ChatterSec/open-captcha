@@ -9,7 +9,7 @@ class FileLoader extends Loader {
     }
 
     load(url = '', onLoad, onProgress, onError) {
-		console.log('Requested file', url)
+		// console.log('Requested file', url)
         url = this.manager.resolveURL(url);
 
         if (loading[url]) {

@@ -344,12 +344,12 @@ class MaterialCreator {
 
 		async function setMapForType( mapType, value ) {
 
-			console.log('Called setMapForType:', mapType, value,)
+			// console.log('Called setMapForType:', mapType, value,)
 
 			if ( params[ mapType ] ) return; // Keep the first encountered texture
 
 			const texParams = scope.getTextureParams( value, params );
-			console.log('Resolve URL:', resolveURL( scope.baseUrl, texParams.url ))
+			// console.log('Resolve URL:', resolveURL( scope.baseUrl, texParams.url ))
 			const map = await scope.loadTexture( resolveURL( scope.baseUrl, texParams.url ));
 
 
@@ -376,7 +376,7 @@ class MaterialCreator {
 
 			if ( value === '' ) continue;
 
-			console.log('Found map:', prop.toLowerCase(), '>', value)
+			// console.log('Found map:', prop.toLowerCase(), '>', value)
 
 			switch ( prop.toLowerCase() ) {
 
@@ -544,7 +544,7 @@ class MaterialCreator {
 
 	async loadTexture( url, mapping, onLoad, onProgress, onError ) {
 
-		console.log('Loading texture:', url)
+		// console.log('Loading texture:', url)
 		const loader = new TextureLoader( this.manager );
 
 		const loaderPromise = new Promise(async res => {

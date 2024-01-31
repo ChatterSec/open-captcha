@@ -11,7 +11,7 @@ class TextureLoader extends Loader {
 	}
 
 	async load( url, onLoad, onProgress, onError ) {
-		console.log('Called texture loader load')
+		// console.log('Called texture loader load')
 
 		const texture = new Texture();
 

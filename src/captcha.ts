@@ -60,7 +60,7 @@ export default class captcha {
             options.push({ 
                 model: object.name,
                 colour: colour.name,
-                direction: Object.keys(object.directions)[Object.values(object.directions).indexOf(direction)],
+                direction: direction.name,
                 imageBuffer: rendering,
             })
         }

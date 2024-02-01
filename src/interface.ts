@@ -11,23 +11,10 @@ interface ObjectData {
         }
     },
     "directions": {
-        "left": {
-            "min": number,
-            "max": number
-        },
-        "right": {
-            "min": number,
-            "max": number
-        },
-        "foward": {
-            "min": number,
-            "max": number
-        },
-        "back": {
-            "min": number,
-            "max": number
-        }
-    },
+        "name": string,
+        "min": number,
+        "max": number
+    }[],
     "rotation": {
         "x": number,
         "y": number
@@ -38,14 +25,12 @@ interface ObjectData {
         "Ks": number[],
         "Ke": number[]
     }
-    "colours": [
-        {
-            "name": string,
-            "r": number,
-            "g": number,
-            "b": number
-        }
-    ]
+    "colours": {
+        "name": string,
+        "r": number,
+        "g": number,
+        "b": number
+    }[]
 }
 
 interface MtlCoefficients {

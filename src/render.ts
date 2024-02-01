@@ -1,4 +1,4 @@
-const FOUR = require('@open-captcha/fourjs');
+const FOUR = require('@open-captcha/fourjs'); // https://github.com/NotReeceHarris/open-captcha-four
 const { createCanvas } = require('./canvas');
 const { OBJLoader } = require('@open-captcha/fourjs/loaders/OBJLoader.js');
 const { MTLLoader } = require('@open-captcha/fourjs/loaders/MTLLoader.js');

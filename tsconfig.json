@@ -13,6 +13,6 @@
       "sourceMap": true,
       "resolveJsonModule": true
     },
-    "include": ["src/**/*.ts", "four.js/four.d.ts", "objects.json", "tests/test.js", "src/canvas/mock.js", "src/canvas/index.js", "src/canvas/canvas.js"],
+    "include": ["src/**/*.ts", "models/objects.json"],
     "exclude": ["node_modules"]
 }

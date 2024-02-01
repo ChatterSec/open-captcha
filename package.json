@@ -15,7 +15,7 @@
     "assets/"
   ],
   "scripts": {
-    "test": "node ./dist/test.js",
+    "test": "node ./dist/src/test.js",
     "build": "tsc",
     "build-watch": "tsc --watch",
     "minify": "terser --compress --mangle --output ./dist/captcha.js -- ./dist/captcha.js"
@@ -30,6 +30,7 @@
     "canvas": "^2.11.2",
     "gl": "^6.0.2",
     "glsl-tokenizer": "^2.1.5",
+    "jimp": "^0.22.10",
     "jsdom": "^24.0.0",
     "sharp": "^0.33.2"
   }

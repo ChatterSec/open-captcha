@@ -1,10 +1,12 @@
 const { createCanvas } = require('./canvas');
 
+interface canvasType {toBuffer: (arg0: string) => Buffer}
+
 function generateCanvas(/* Currently a placeholder code, needs improving */) {
     const canvas = createCanvas(512, 512);
     const context = canvas.getContext('2d');
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 10000; i++) {
         const x = Math.floor(Math.random() * canvas.width);
         const y = Math.floor(Math.random() * canvas.height);
         const width = Math.floor(Math.random() * 100);
@@ -18,9 +20,9 @@ function generateCanvas(/* Currently a placeholder code, needs improving */) {
     return canvas;
 }
 
-function generateImage(canvas: {toBuffer: (arg0: string) => Buffer;} | null = null): Buffer {
+function generateImage(canvas: canvasType | null = null): Buffer {
     if (!canvas) {
-        canvas = generateCanvas() as {toBuffer: (arg0: string) => Buffer;};
+        canvas = generateCanvas() as canvasType;
     }
 
     const buffer = canvas.toBuffer('image/png');

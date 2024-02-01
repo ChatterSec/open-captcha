@@ -13,7 +13,6 @@
     "dist/**/*",
     "models/",
     "assets/"
-
   ],
   "scripts": {
     "test": "node ./tests/test.js",
@@ -27,10 +26,13 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@open-captcha/fourjs": "^1.0.0",
     "canvas": "^2.11.2",
     "gl": "^6.0.2",
     "glsl-tokenizer": "^2.1.5",
+    "i": "^0.3.7",
     "jsdom": "^24.0.0",
+    "npm": "^10.4.0",
     "sharp": "^0.33.2"
   }
 }

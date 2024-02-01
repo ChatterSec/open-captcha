@@ -1,8 +1,8 @@
-const { render } = require('../dist/src/render');
-const { rgbToMtlCoefficients } = require('../dist/src/utils');
+const { render } = require('../dist/render');
+const { rgbToMtlCoefficients } = require('../dist/utils');
 const { writeFileSync, readFileSync } = require('fs');
 const sharp = require('sharp');
-const objects = require('../objects.json');
+const objects = require('../models/objects.json');
 
 const selectedModel = 'car'
 

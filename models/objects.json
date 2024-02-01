@@ -5,13 +5,27 @@
         "newmtl_replace": "color",
         "camera": 5,
         "rotation_range": {
-            "y": {
-                "min": 0,
-                "max": 6.283185307179586
-            },
             "x": {
                 "min": 0.7853981633974483,
                 "max": 0.15707963267948966
+            }
+        },
+        "directions": {
+            "left": {
+                "min": 4.2,
+                "max": 5.4
+            },
+            "right": {
+                "min": 1,
+                "max": 2
+            },
+            "foward": {
+                "min": -0.4,
+                "max": 0.4
+            },
+            "back": {
+                "min": 2.6,
+                "max": 3.6
             }
         },
         "colours": [

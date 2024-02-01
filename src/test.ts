@@ -61,27 +61,72 @@ const { generateImage } = require('../dist/background');
 
 const background = generateImage();
 
-let object = Object.assign({}, objects[selectedModel]);
-const colour = Object.values(object.colours)[Object.keys(object.colours)[Math.floor(Math.random() * Object.values(object.colours).length)]];
-const mtlCoefficients = rgbToMtlCoefficients(colour.r, colour.g, colour.b);
+interface ObjectData {
+    "obj": string
+    "mtl": string
+    "newmtl_replace": string,
+    "camera": number,
+    "rotation_range": {
+        "x": {
+            "min": number,
+            "max": number
+        }
+    },
+    "directions": {
+        "left": {
+            "min": number,
+            "max": number
+        },
+        "right": {
+            "min": number,
+            "max": number
+        },
+        "foward": {
+            "min": number,
+            "max": number
+        },
+        "back": {
+            "min": number,
+            "max": number
+        }
+    },
+    "rotation": {
+        "x": number,
+        "y": number
+    },
+    "colour": {
+        "Ka": number[],
+        "Kd": number[],
+        "Ks": number[],
+        "Ns": number[]
+    }
+    "colours": [
+        {
+            "name": string,
+            "r": number,
+            "g": number,
+            "b": number
+        }
+    ]
+}
 
-object.colour = mtlCoefficients;
+let object = Object.assign({}, objects[selectedModel]) as ObjectData;
+
+//const colour = Object.values(object.colours)[Object.keys(object.colours)[Math.floor(Math.random() * Object.values(object.colours).length)]];
+const colour = object.colours[0];
+object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b);
 
 // const direction = Object.values(object.directions)[Math.floor(Math.random() * Object.values(object.directions).length)];
 const direction = object.directions.back;
-
 object.rotation = {
     "y": Math.random() * (direction.max - direction.min) + direction.min,
     "x": Math.random() * (object.rotation_range.x.max - object.rotation_range.x.min) + object.rotation_range.x.min
 }
 
-delete object.colours;
-delete object.rotation_range;
-
-render(object, (buffer) => {
+render(object, (buffer: Buffer) => {
     sharp(background)
     .composite([{ input: buffer, blend: 'over' }])
-    .toFile('./tests/complete.jpg', (err) => {
+    .toFile('./tests/complete.jpg', (err: string) => {
         if (err) {
             console.error(err);
         } else {

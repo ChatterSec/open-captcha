@@ -1,7 +1,7 @@
-const FOUR = require('../../four.js/Four');
-const { createCanvas } = require('../../canvas');
-const { OBJLoader } = require('../../four.js/loaders/OBJLoader.js');
-const { MTLLoader } = require('../../four.js/loaders/MTLLoader.js');
+const FOUR = require('@open-captcha/fourjs');
+const { createCanvas } = require('./canvas');
+const { OBJLoader } = require('@open-captcha/fourjs/loaders/OBJLoader.js');
+const { MTLLoader } = require('@open-captcha/fourjs/loaders/MTLLoader.js');
 
 interface ObjectData {
     obj: string;
@@ -31,7 +31,7 @@ export function render(objectData: ObjectData, callback: (buffer: Buffer) => voi
     scene.add(light);
 
     const canvas = createCanvas(width, height);
-    const renderer = new FOUR.WebGLRenderer({ canvas, alpha: true, precision: 'lowp' });
+    const renderer = new FOUR.WebGL1Renderer({ canvas, alpha: true, precision: 'lowp' });
 
     const mtlLoader = new MTLLoader();
     mtlLoader.load(objectData, async (material: any) => {

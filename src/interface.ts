@@ -1,4 +1,5 @@
 interface ObjectData {
+    "name": string,
     "obj": string
     "mtl": string
     "newmtl_replace": string,

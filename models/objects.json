@@ -1,5 +1,6 @@
 {
     "car": {
+        "name": "Car",
         "obj": "/car/car.obj",
         "mtl": "/car/car.mtl",
         "newmtl_replace": "color",

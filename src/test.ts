@@ -1,14 +1,18 @@
 import captcha from './captcha';
+import { writeFileSync } from 'fs';
 
-console.time('Initiation time');
-const captchaTest = new captcha();
-console.timeEnd('Initiation time');
+(async () => {
+    console.time('Initiation time');
+    const captchaTest = new captcha();
+    console.timeEnd('Initiation time');
 
-console.time('Generation time');
-captchaTest.generate();
-console.timeEnd('Generation time');
+    console.time('Generation time');
+    const challenge = await captchaTest.generate();
+    console.timeEnd('Generation time');
 
-
+    console.log(challenge);
+    writeFileSync('./tests/render.png', await challenge[0].imageBuffer);
+})();
 
 /*const { render } = require('../dist/render');
 const { rgbToMtlCoefficients } = require('../dist/utils');

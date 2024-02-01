@@ -17,40 +17,55 @@ export default class captcha {
         this.#_encryptionIv = randomBytes(16);
     }
 
-    async generate(): Promise<object> {
+    async generate(): Promise<{model:string, colour:string, direction:string, imageBuffer: Promise<Buffer>}[]> {
 
-        const background = generateImage();
-        const overlay = await addAlpha(generateImage(), 0.3);
-        let object = Object.assign({}, objects[selectedModel]) as ObjectData;
+        const options = []
 
-        const colour = Object.values(object.colours)[Math.floor(Math.random() * Object.values(object.colours).length)];
-        //const colour = object.colours[0];
-        object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b) as MtlCoefficients;
+        for (let i = 0; i < 9; i++) {
+            const background = generateImage();
+            const overlay = await addAlpha(generateImage(), 0.3);
+            let object = Object.assign({}, objects[selectedModel]) as ObjectData;
 
-        const direction = Object.values(object.directions)[Math.floor(Math.random() * Object.values(object.directions).length)];
-        //const direction = object.directions.back;
-        object.rotation = {
-            "y": Math.random() * (direction.max - direction.min) + direction.min,
-            "x": Math.random() * (object.rotation_range.x.max - object.rotation_range.x.min) + object.rotation_range.x.min
+            const colour = Object.values(object.colours)[Math.floor(Math.random() * Object.values(object.colours).length)];
+            object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b) as MtlCoefficients;
+
+            const direction = Object.values(object.directions)[Math.floor(Math.random() * Object.values(object.directions).length)];
+            object.rotation = {
+                "y": Math.random() * (direction.max - direction.min) + direction.min,
+                "x": Math.random() * (object.rotation_range.x.max - object.rotation_range.x.min) + object.rotation_range.x.min
+            }
+
+            const rendering = new Promise((resolve, reject) => {
+                try {
+                    render(object, (buffer: Buffer) => {
+                        sharp(background)
+                        .composite([
+                            { input: buffer, blend: 'over' },
+                            { input: overlay, blend: 'over'}
+                        ])
+                        .toBuffer()
+                        .then((data) => {
+                            resolve(data);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        
+                        });
+                    }) 
+                } catch (error) {
+                    reject(error);
+                }
+            }) as Promise<Buffer>;
+
+            options.push({ 
+                model: object.name,
+                colour: colour.name,
+                direction: Object.keys(object.directions)[Object.values(object.directions).indexOf(direction)],
+                imageBuffer: rendering,
+            })
         }
 
-        render(object, (buffer: Buffer) => {
-            sharp(background)
-            .composite([
-                { input: buffer, blend: 'over' },
-                { input: overlay, blend: 'over'}
-            ])
-            .toFile('./tests/complete.jpg', (err: Error) => {
-                if (err) {
-                    console.error(err);
-                } else {
-                    console.log('Layered image saved');
-                }
-            });
-        }) 
-
-
-        return { };
+        return options;
     }
 
     validate(userAnswer: string, encryptedAnswer: string): boolean {

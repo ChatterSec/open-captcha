@@ -2,7 +2,6 @@ const {Canvas, Image} = require('canvas');
 import * as Cnvs from 'canvas';
 
 const EventEmitter = require('events');
-
 const createGLContext = require('gl');
 
 const jsdom = require("jsdom");

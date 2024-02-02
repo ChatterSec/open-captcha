@@ -1,4 +1,5 @@
 const {Canvas, Image} = require('canvas');
+import * as Cnvs from 'canvas';
 
 const EventEmitter = require('events');
 
@@ -11,10 +12,10 @@ global.window = JSdom.window;
 global.document = JSdom.window.document;
 
 
-const _ctx = Symbol('ctx');
+const _ctx = Symbol('ctx') as any as string;
 
 
-function putImageData(gl, canvas) {
+function putImageData(gl: any, canvas: any) {
 
   const {width, height} = canvas;
 
@@ -61,7 +62,7 @@ function putImageData(gl, canvas) {
 
 class NodeCanvasElement extends Canvas {
 
-  constructor(...args) {
+  constructor(...args: any[]) {
 
     super(...args);
 
@@ -147,7 +148,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  getContext(type, options) {
+  getContext(type: string, options: any = {}) {
 
     if(this.__contextType__ && this.__contextType__ !== type) return null;
 
@@ -168,7 +169,7 @@ class NodeCanvasElement extends Canvas {
 
       // Temporary fix https://github.com/stackgl/headless-gl/issues/170
 
-      ctx.getUniformLocation = function (program, name) {
+      ctx.getUniformLocation = function (program: any, name: string) {
 
         if(program._uniforms && !/\[\d+\]$/.test(name)) {
 
@@ -197,7 +198,7 @@ class NodeCanvasElement extends Canvas {
 
       const _tetImage2D = ctx.texImage2D;
 
-      ctx.texImage2D = function (...args) {
+      ctx.texImage2D = function (...args: any[]) {
 
         let pixels = args[args.length - 1];
 
@@ -228,7 +229,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  toBuffer(...args) {
+  toBuffer(...args: any[]) {
 
     const gl = this.__gl__;
 
@@ -243,7 +244,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  toDataURL(...args) {
+  toDataURL(...args: any[]) {
 
     const gl = this.__gl__;
 
@@ -258,7 +259,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  createPNGStream(...args) {
+  createPNGStream(...args: any[]) {
 
     const gl = this.__gl__;
 
@@ -273,7 +274,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  createJPEGStream(...args) {
+  createJPEGStream(...args: any[]) {
 
     const gl = this.__gl__;
 
@@ -288,7 +289,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  createPDFStream(...args) {
+  createPDFStream(...args: any[]) {
 
     const gl = this.__gl__;
 
@@ -303,14 +304,14 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  addEventListener(type, listener) {
+  addEventListener(type: string, listener: any) {
 
     return this.__event__.addListener(type, listener);
 
   }
 
 
-  removeEventListener(type, listener) {
+  removeEventListener(type: string, listener: any) {
 
     if(listener) {
 
@@ -323,7 +324,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  dispatchEvent(event) {
+  dispatchEvent(event: any) {
 
     event.target = this;
 
@@ -332,7 +333,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  setAttribute(key, value) {
+  setAttribute(key: string, value: any) {
 
     this.__attributes__[key] = value;
 
@@ -353,7 +354,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  getAttribute(key) {
+  getAttribute(key: string) {
 
     if (key === 'width') {
 
@@ -372,7 +373,7 @@ class NodeCanvasElement extends Canvas {
   }
 
 
-  removeAttribute(key) {
+  removeAttribute(key: string) {
 
     delete this.__attributes__[key];
 

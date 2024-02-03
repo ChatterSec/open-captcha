@@ -1,3 +1,6 @@
+> [!NOTE]  
+> This is a work in process, please dont use this in production until the first release.
+
 # open-captcha
 Open Captcha stands out from other captcha providers in a big way. Forget about connecting to external services or making your users work for free to train AI. Our approach ensures that each challenge is unique and employs the most advanced anti-ai detection methods, all while being completly self-hosted and intergrated into your web-app.
 

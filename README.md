@@ -1,4 +1,4 @@
-> [!NOTE]  
+> [!CAUTION]
 > This is a work in process, please dont use this in production until the first release.
 
 # open-captcha

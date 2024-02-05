@@ -5,17 +5,19 @@ import { generateImage } from './filter';
 import { ObjectData, MtlCoefficients } from "./interface";
 import { render } from './render';
 import sharp from 'sharp';
-import { encrypt } from "./cryptography";
+import { decrypt, encrypt } from "./cryptography";
 
 const selectedModel = 'car'
  
 export default class captcha {
     #_encryptionKey: Buffer;
     #_encryptionIv: Buffer;
+    #_token: string;
 
     constructor() {
         this.#_encryptionKey = randomBytes(32);
         this.#_encryptionIv = randomBytes(16);
+        this.#_token = randomBytes(32).toString('hex');
     }
 
     async generate(): Promise<{model:string, colour:string, direction:string, images:{base64:String, hash:string}[], anwser:string}> {
@@ -63,7 +65,7 @@ export default class captcha {
                 colour: colour.name,
                 direction: direction.name,
                 imageBuffer: await rendering,
-                hash: createHash('sha256').update(JSON.stringify(object)).digest('hex')
+                hash: createHash('sha256').update(JSON.stringify([object.name, object.colour, object.directions])).digest('hex')
             })
         }
 
@@ -78,8 +80,35 @@ export default class captcha {
         };
     }
 
-    validate(userAnswer: string, encryptedAnswer: string): boolean {
+    validate(userAnswer: string, encryptedAnswer: string): {valid: boolean, token: string|null} {
 
-        return true;
+        try {
+            const decrypted = decrypt(encryptedAnswer, this.#_encryptionKey, this.#_encryptionIv);
+            return {
+                valid: userAnswer == decrypted,
+                token: encrypt(JSON.stringify({
+                    bloat: randomBytes(32).toString('hex'),
+                    token: this.#_token,
+                    valid: userAnswer == decrypted,
+                    bloat2: randomBytes(32).toString('hex')
+                }), this.#_encryptionKey, this.#_encryptionIv)
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                valid: false,
+                token: null
+            };
+        }
+    }
+
+    validateToken(token: string): boolean {
+        try {
+            const decrypted = decrypt(token, this.#_encryptionKey, this.#_encryptionIv);
+            const data = JSON.parse(decrypted);
+            return data.token == this.#_token && data.valid == true;
+        } catch (error) {
+            return false;
+        }
     }
 }

@@ -11,12 +11,10 @@ const selectedModel = 'car'
 module.exports = class captcha implements Captcha {
     #_encryptionKey: Buffer;
     #_encryptionIv: Buffer;
-    #_token: Buffer;
 
     constructor() {
         this.#_encryptionKey = randomBytes(32);
         this.#_encryptionIv = randomBytes(16);
-        this.#_token = randomBytes(32);
     }
 
     async generate() {
@@ -38,7 +36,7 @@ module.exports = class captcha implements Captcha {
                     colour: colour.name,
                     direction: direction.name,
                     image: await Render(object),
-                    token: (Buffer.concat([this.#_token, randomBytes(16)])).toString('hex')
+                    token: randomBytes(12).toString('hex')
                 })
             })
         })) as {
@@ -70,5 +68,15 @@ module.exports = class captcha implements Captcha {
                 "token": encryptedAnswer
             },
         };
+    }
+
+    async verify(token: string, anwserToken: string) {
+        const decryptedToken = await decrypt(anwserToken, this.#_encryptionKey, this.#_encryptionIv);
+
+        if (!decryptedToken) {
+            throw new Error('Failed to decrypt token');
+        }
+
+        return token === decryptedToken;
     }
 }

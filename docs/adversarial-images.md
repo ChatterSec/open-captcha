@@ -6,7 +6,6 @@ In this [Google DeepMind article](https://deepmind.google/discover/blog/images-a
 
 <sub>Left: An Artificial Neural Network (ANN) correctly classifies the image as a vase but when perturbed by a seemingly random pattern across the entire picture (middle), with the intensity magnified for illustrative purposes – the resulting image (right) is incorrectly, and confidently, misclassified as a cat.</sub>
 
-
 In this more complex pytorch diagram. it shows a famous [FGSM](https://arxiv.org/abs/1412.6572) panda example
 
 ![classification: Panda + adversarial pattern = classification: Gibbon](fgsm_panda_image.png)

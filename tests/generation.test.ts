@@ -3,7 +3,6 @@ const oCaptcha = new Captcha();
 
 const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 
-
 it('Do we get 6 images', async () => {
     const generation = await oCaptcha.generate()
     expect(generation.images).toHaveLength(6)

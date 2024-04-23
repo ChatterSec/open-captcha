@@ -1,12 +1,11 @@
-const { createCanvas } = require('./canvas');
+import createCanvas from './canvas';
+import { canvasType } from './interface'
 
-interface canvasType {toBuffer: (arg0: string) => Buffer}
-
-function generateCanvas(/* Currently a placeholder code, needs improving */) {
-    const canvas = createCanvas(512, 512);
+function generateCanvas() {
+    const canvas = createCanvas(256, 256, 'png');
     const context = canvas.getContext('2d');
 
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 1000; i++) {
         const x = Math.floor(Math.random() * canvas.width);
         const y = Math.floor(Math.random() * canvas.height);
         const width = Math.floor(Math.random() * 100);

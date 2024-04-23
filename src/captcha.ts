@@ -1,114 +1,74 @@
-import { randomBytes, createHash } from "crypto";
 import objects from '../models/objects.json';
-import { addAlpha, rgbToMtlCoefficients } from "./utils";
-import { generateImage } from './filter';
-import { ObjectData, MtlCoefficients } from "./interface";
-import { render } from './render';
-import sharp from 'sharp';
+
+import Render from './render';
+import { randomBytes } from "crypto";
+import { rgbToMtlCoefficients, rSelect } from "./utils";
 import { decrypt, encrypt } from "./cryptography";
+import { ObjectData, MtlCoefficients, Captcha } from "./interface";
 
 const selectedModel = 'car'
- 
-export default class captcha {
+
+module.exports = class captcha implements Captcha {
     #_encryptionKey: Buffer;
     #_encryptionIv: Buffer;
-    #_token: string;
+    #_token: Buffer;
 
     constructor() {
         this.#_encryptionKey = randomBytes(32);
         this.#_encryptionIv = randomBytes(16);
-        this.#_token = randomBytes(32).toString('hex');
+        this.#_token = randomBytes(32);
     }
 
-    async generate(): Promise<{model:string, colour:string, direction:string, images:{base64:String, hash:string}[], anwser:string}> {
+    async generate() {
+        const options = await Promise.all(Array.from({ length: 6 }, () => {
+            return new Promise(async (res): Promise<any> => {
+                let object = Object.assign({}, objects[selectedModel]) as ObjectData;
 
-        const options = []
+                const colour = rSelect(Object.values(object.colours));
+                object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b) as MtlCoefficients;
 
-        for (let i = 0; i < 6; i++) {
-            const background = generateImage();
-            const overlay = await addAlpha(generateImage(), 0.3);
-            let object = Object.assign({}, objects[selectedModel]) as ObjectData;
-
-            const colour = Object.values(object.colours)[Math.floor(Math.random() * Object.values(object.colours).length)];
-            object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b) as MtlCoefficients;
-
-            const direction = Object.values(object.directions)[Math.floor(Math.random() * Object.values(object.directions).length)];
-            object.rotation = {
-                "y": Math.random() * (direction.max - direction.min) + direction.min,
-                "x": Math.random() * (object.rotation_range.x.max - object.rotation_range.x.min) + object.rotation_range.x.min
-            }
-
-            const rendering = new Promise((resolve, reject) => {
-                try {
-                    render(object, (buffer: Buffer) => {
-                        sharp(background)
-                        .composite([
-                            { input: buffer, blend: 'over' },
-                            { input: overlay, blend: 'over'}
-                        ])
-                        .toBuffer()
-                        .then((data) => {
-                            resolve(data);
-                        })
-                        .catch((error) => {
-                            reject(error);
-                        
-                        });
-                    }) 
-                } catch (error) {
-                    reject(error);
+                const direction = rSelect(Object.values(object.directions));
+                object.rotation = {
+                    "y": Math.random() * (direction.max - direction.min) + direction.min,
+                    "x": Math.random() * (object.rotation_range.x.max - object.rotation_range.x.min) + object.rotation_range.x.min
                 }
-            }) as Promise<Buffer>;
 
-            options.push({ 
-                model: object.name,
-                colour: colour.name,
-                direction: direction.name,
-                imageBuffer: await rendering,
-                hash: createHash('sha256').update(JSON.stringify([object.name, object.colour, object.directions])).digest('hex')
+                res({
+                    model: object.name,
+                    colour: colour.name,
+                    direction: direction.name,
+                    image: await Render(object),
+                    token: (Buffer.concat([this.#_token, randomBytes(16)])).toString('hex')
+                })
             })
-        }
+        })) as {
+            model: string,
+            colour: string,
+            direction: string,
+            image: Buffer,
+            token: string
+        }[]
 
-        const selected = options[Math.floor(Math.random() * options.length)];
+        const selected = rSelect(options);
+        const encryptedAnswer = await encrypt(selected.token, this.#_encryptionKey, this.#_encryptionIv);
+
+        if (!encryptedAnswer) {
+            throw new Error('Failed to encrypt answer');
+        }
 
         return {
-            "model": selected.model,
-            "colour": selected.colour,
-            "direction": selected.direction,
-            "images": options.map((option) => {return {base64: option.imageBuffer.toString('base64'), hash: option.hash}}),
-            "anwser": encrypt(selected.hash, this.#_encryptionKey, this.#_encryptionIv),
+            "images": options.map((option) => {
+                return {
+                    base64: 'data:image/png;base64,' + option.image.toString('base64').replace(/(\r\n|\n|\r)/gm, ""),
+                    token: option.token
+                }
+            }),
+            "anwser": {
+                "model": selected.model,
+                "colour": selected.colour,
+                "direction": selected.direction,
+                "token": encryptedAnswer
+            },
         };
-    }
-
-    validate(userAnswer: string, encryptedAnswer: string): {valid: boolean, token: string|null} {
-
-        try {
-            const decrypted = decrypt(encryptedAnswer, this.#_encryptionKey, this.#_encryptionIv);
-            return {
-                valid: userAnswer == decrypted,
-                token: encrypt(JSON.stringify({
-                    bloat: randomBytes(32).toString('hex'),
-                    token: this.#_token,
-                    valid: userAnswer == decrypted,
-                    bloat2: randomBytes(32).toString('hex')
-                }), this.#_encryptionKey, this.#_encryptionIv)
-            }
-        } catch (error) {
-            console.log(error)
-            return {
-                valid: false,
-                token: null
-            };
-        }
-    }
-
-    validateToken(token: string): boolean {
-        try {
-            const decrypted = decrypt(token, this.#_encryptionKey, this.#_encryptionIv);
-            const data = JSON.parse(decrypted);
-            return data.token == this.#_token && data.valid == true;
-        } catch (error) {
-            return false;
-        }
     }
 }

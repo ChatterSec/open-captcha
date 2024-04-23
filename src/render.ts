@@ -1,39 +1,47 @@
-const FOUR = require('@open-captcha/fourjs'); // https://github.com/NotReeceHarris/open-captcha-four
-const { createCanvas } = require('./canvas');
+import sharp from 'sharp';
+import createCanvas from './canvas';
+import { addAlpha } from './utils';
+import { ObjectData } from './interface';
+import { generateImage } from './filter';
+
+// https://github.com/NotReeceHarris/open-captcha-four
+const { Scene } = require('@open-captcha/fourjs/scenes/Scene.js');
 const { OBJLoader } = require('@open-captcha/fourjs/loaders/OBJLoader.js');
 const { MTLLoader } = require('@open-captcha/fourjs/loaders/MTLLoader.js');
+const { PointLight } = require('@open-captcha/fourjs/lights/PointLight.js');
+const { WebGL1Renderer } = require('@open-captcha/fourjs/renderers/WebGL1Renderer.js');
+const { PerspectiveCamera } = require('@open-captcha/fourjs/cameras/PerspectiveCamera.js');
 
-interface ObjectData {
-    obj: string;
-    mtl: string;
-    newmtl_replace: string;
-    camera: number;
-    rotation: {
-        y: number;
-        x: number;
-    };
-    colour: {
-        Ka: number[];
-        Kd: number[];
-        Ks: number[];
-        Ke: number[];
-    };
+const width = 256;
+const height = 256;
+
+function createCamera(cameraPosition: number): any {
+    const camera = new PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = cameraPosition;
+    camera.position.y = 1;
+    return camera;
 }
 
-const width = 512;
-const height = 512;
+function createLight(): any {
+    const light = new PointLight(0x404040, 5, 100);
+    light.position.set(-5, 15, 25);
+    light.castShadow = true;
+    light.power = 1000000;
+    return light;
+}
 
-export function render(objectData: ObjectData, callback: (buffer: Buffer) => void): void {
+function render(objectData: ObjectData, callback: (buffer: Buffer) => void): void {
 
-    const scene = createScene();
+    const scene = new Scene();
     const camera = createCamera(objectData.camera);
     const light = createLight();
+
     scene.add(light);
 
-    const canvas = createCanvas(width, height);
-    const renderer = new FOUR.WebGL1Renderer({ canvas, alpha: true, precision: 'lowp' });
-
+    const canvas = createCanvas(width, height, 'png');
+    const renderer = new WebGL1Renderer({ canvas, alpha: true, precision: 'lowp' });
     const mtlLoader = new MTLLoader();
+
     mtlLoader.load(objectData, async (material: any) => {
         material.preload();
         const objLoader = new OBJLoader();
@@ -41,36 +49,40 @@ export function render(objectData: ObjectData, callback: (buffer: Buffer) => voi
 
         objLoader.load(`./models/${objectData.obj}`, (object: any) => {
             const mesh = object.children[0];
+
             mesh.rotation.y = objectData.rotation.y;
             mesh.rotation.x = objectData.rotation.x;
 
             scene.add(mesh);
             renderer.render(scene, camera);
+
             const buffer = canvas.toBuffer('image/png');
             callback(buffer);
-        }, undefined, handleError);
-    }, undefined, handleError);
+        }, undefined, (error: Error) => console.error('An error happened', error));
+    }, undefined, (error: Error) => console.error('An error happened', error));
 }
 
-function createScene(): any {
-    return new FOUR.Scene();
-}
+export default (object: ObjectData) => new Promise(async (resolve, reject) => {
+    try {
+        const background = generateImage();
+        const overlayBase = generateImage();
+        const overlay = await addAlpha(overlayBase, 0.3);
 
-function createCamera(cameraPosition: number): any {
-    const camera = new FOUR.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = cameraPosition;
-    camera.position.y = 1;
-    return camera;
-}
-
-function createLight(): any {
-    const light = new FOUR.PointLight(0x404040, 5, 100);
-    light.position.set(-5, 15, 25);
-    light.castShadow = true;
-    light.power = 1000000;
-    return light;
-}
-
-function handleError(error: any): void {
-    console.error('An error happened', error);
-}
+        render(object, (buffer: Buffer) => {
+            sharp(background)
+            .composite([
+                { input: buffer, blend: 'over' },
+                { input: overlay, blend: 'over'}
+            ])
+            .toBuffer()
+            .then((data) => {
+                resolve(data);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+        }) 
+    } catch (error) {
+        reject(error);
+    }
+}) as Promise<Buffer>;

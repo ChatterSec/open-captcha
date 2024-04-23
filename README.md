@@ -8,9 +8,9 @@ Open Captcha stands out from other captcha providers in a big way. Forget about 
 
 ## Benchmarking
 
-version | os | runs | avg duration
---- | --- | --- | ---
-1.1.x | `Linux Lab 5.15.0-94-generic #104-Ubuntu SMP Tue Jan 9 15:25:40 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux` | 500 | 471.93 /ms
+version | os | cpu | gpu | runs | avg duration
+--- | --- | --- | --- | --- | ---
+1.1.x | `Linux Lab 5.15.0-94-generic #104-Ubuntu SMP Tue Jan 9 15:25:40 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux` | `11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz` | `TigerLake-LP GT2 [Iris Xe Graphics]` | 500 | 471.93 /ms
 
 To benchmark yourself run the script `npm run benchmark`
 
@@ -27,6 +27,9 @@ In most cases setting up `open-captcha` from npm should just work. However, sinc
 
 ```
 sudo apt-get install -y build-essential libxi-dev libglu1-mesa-dev libglew-dev pkg-config python3 python-is-python3
+```
+```
+sudo yum install -y gcc-c++ libXi-devel mesa-libGL-devel glew-devel pkgconfig python3
 ```
 
 ### Windows

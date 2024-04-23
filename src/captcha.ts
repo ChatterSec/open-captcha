@@ -2,8 +2,8 @@ import objects from '../models/objects.json';
 
 import Render from './render';
 import { randomBytes } from "crypto";
-import { rgbToMtlCoefficients, rSelect } from "./utils";
 import { decrypt, encrypt } from "./cryptography";
+import { rgbToMtlCoefficients, rSelect } from "./utils";
 import { ObjectData, MtlCoefficients, Captcha } from "./interface";
 
 const selectedModel = 'car'

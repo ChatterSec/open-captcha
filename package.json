@@ -1,7 +1,7 @@
 {
   "name": "open-captcha",
-  "version": "0.0.1",
-  "description": "A simple captcha generator",
+  "version": "0.1.0",
+  "description": "Generative visual CAPTCHA, all rendered on the backend. ",
   "main": "dist/src/captcha.js",
   "types": "dist/src/captcha.d.ts",
   "repository": "https://github.com/NotReeceHarris/open-captcha",

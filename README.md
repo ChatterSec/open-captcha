@@ -1,5 +1,5 @@
 > [!CAUTION]
-> This is a proof of concept and has not been tested against image recognition yet, to keep your system secure use an already prooven secure captcha. However if you have the skills or resources to run image recognition on some samples please see `examples/` for some sample outputs.
+> This is a proof of concept and has not been tested against image recognition yet, to keep your system secure use an already prooven secure captcha. However if you have the skills or resources to run image recognition on some samples please see [`examples/`](/examples/) for some sample outputs.
 
 # open-captcha
 Open Captcha stands out from other captcha providers in a big way. Forget about connecting to external services or making your users work for free to train AI. Our approach ensures that each challenge is unique and employs the most advanced anti-ai detection methods, all while being completly self-hosted and intergrated into your web-app.

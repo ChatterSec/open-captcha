@@ -43,3 +43,14 @@ sudo yum install -y gcc-c++ libXi-devel mesa-libGL-devel glew-devel pkgconfig py
 
 - [Python 3.x](https://www.python.org/)
 - [XCode](https://developer.apple.com/xcode/)
+
+
+## Setup
+
+Unfortunately, setting up open-captcha isn't straightforward for everyone. However, in some cases, all you need to do is run the `npm install` command. Because open-captcha relies on headless image generation, which is not natively supported in Node.js, there are a few build requirements to consider.
+
+First, ensure that you have the required dependencies listed above. Then, it's a matter of some trial and error from there. Make sure you have `python3` aliased as `python`, as some tasks may require specific permissions. You can either run them as root or configure your permissions accordingly.
+
+```
+npm i open-captcha@latest
+```

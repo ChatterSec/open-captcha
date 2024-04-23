@@ -1,8 +1,8 @@
 import createCanvas from './canvas';
 import { canvasType } from './interface'
 
-function generateCanvas() {
-    const canvas = createCanvas(256, 256, 'png');
+function generateCanvas(w: number, h: number) {
+    const canvas = createCanvas(w, h, 'png');
     const context = canvas.getContext('2d');
 
     for (let i = 0; i < 1000; i++) {
@@ -19,9 +19,9 @@ function generateCanvas() {
     return canvas;
 }
 
-function generateImage(canvas: canvasType | null = null): Buffer {
+function generateImage(canvas: canvasType | null = null, w:number, h:number): Buffer {
     if (!canvas) {
-        canvas = generateCanvas() as canvasType;
+        canvas = generateCanvas(w, h) as canvasType;
     }
 
     const buffer = canvas.toBuffer('image/png');

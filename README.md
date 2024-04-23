@@ -10,7 +10,7 @@ Open Captcha stands out from other captcha providers in a big way. Forget about 
 
 version | os | runs | avg duration
 --- | --- | --- | ---
-1.1.x | `Linux Lab 5.15.0-94-generic #104-Ubuntu SMP Tue Jan 9 15:25:40 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux` | 500 | 471.937245 /ms
+1.1.x | `Linux Lab 5.15.0-94-generic #104-Ubuntu SMP Tue Jan 9 15:25:40 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux` | 500 | 471.93 /ms
 
 To benchmark yourself run the script `npm run benchmark`
 

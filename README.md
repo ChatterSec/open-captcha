@@ -8,7 +8,7 @@ open-captcha stands out from other captcha providers in a big way. Forget about 
 
 ## Benchmarking
 
-To benchmark yourself run the script `npm run benchmark`, please consider sharing your benchmark results by making a [PR](https://github.com/ChatterSec/open-captcha/pulls) to the [readme](README.md).
+To benchmark yourself run the script `npm run benchmark`, please consider sharing your benchmark results by making a [PR](https://github.com/ChatterSec/open-captcha/pulls) to the [BENCHMARK.md](BENCHMARK.md).
 
 version | os | cpu | gpu | runs | avg generation duration
 --- | --- | --- | --- | --- | ---

@@ -49,6 +49,8 @@ module.exports = class captcha implements Captcha {
         // generate 6 "options" each option has a model name, colour name,
         // direction description, base64 image, and a token.
 
+        const history = [] as { model: string, colour: string, direction: string }[];
+
         const options = await Promise.all(Array.from({ length: 6 }, () => {
             return new Promise(async (res): Promise<any> => {
                 let object = Object.assign({}, objects[selectedModel]) as ObjectData;
@@ -56,18 +58,48 @@ module.exports = class captcha implements Captcha {
                 // Select a random color then apply it to the model, some models have diffrent properties,
                 // so colours must be defined in the models.json.
 
-                const colour = rSelect(Object.values(object.colours));
+                let colour = rSelect(Object.values(object.colours));
                 object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b) as MtlCoefficients;
+
+                // Make sure each image is unique, they can have the same colour and model,
+                // and direction however a model with a colour and direction that has already
+                // been used cannot be used again. for example if we have a blue car facing foward
+                // we can have a red car facing foward but we cannot have a blue car facing foward again
+                // that being said we can still have a blue car facing left, right, or back.
+
+
+                let usedDirectionsSet = new Set();
+                let availableDirections = [];
+                
+                for (let historyObject of history) {
+                    if (historyObject.colour === colour.name) {
+                        usedDirectionsSet.add(historyObject.direction);
+                    }
+                }
+                
+                for (let direction of Object.values(object.directions)) {
+                    if (!usedDirectionsSet.has(direction.name)) {
+                        availableDirections.push(direction);
+                    }
+                }
+
+                if (availableDirections.length === 0) {
+                    // We have run out of unique directions for this colour, so we need to
+                    // select a new colour and reset the available directions.
+                }
 
                 // Select a random direction then find a random point in that direction,
                 // some models have diffrent axis points so directions need to be defined
                 // in the model.json
 
-                const direction = rSelect(Object.values(object.directions));
+                const direction = rSelect(availableDirections);
                 object.rotation = {
                     "y": Math.random() * (direction.max - direction.min) + direction.min,
                     "x": Math.random() * (object.rotation_range.x.max - object.rotation_range.x.min) + object.rotation_range.x.min
                 }
+
+                history.push({ model: object.name, colour: colour.name, direction: direction.name });
+                //console.log(history, history.length)
 
                 res({
                     model: object.name,

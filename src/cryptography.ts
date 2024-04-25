@@ -60,14 +60,14 @@ function decrypt(encryptedText: string, keys: Buffer[], ivs: Buffer[]): string |
         // havent decrypted it then there is an issue 
         // so just return null.
 
-        if (i === keys.length -1) {
+        if (i === keys.length - 1) {
             return null;
         }
-        
+
     }
 }
 
-export { 
-    encrypt, 
+export {
+    encrypt,
     decrypt
 }

@@ -1,7 +1,7 @@
 import objects from '../models/objects.json';
 
 import Render from './render';
-import { randomBytes, pbkdf2 } from "crypto";
+import { randomBytes } from "crypto";
 import { decrypt, encrypt } from "./cryptography";
 import { rgbToMtlCoefficients, rSelect } from "./utils";
 import { ObjectData, MtlCoefficients, Captcha } from "./interface";
@@ -34,7 +34,7 @@ module.exports = class captcha implements Captcha {
         // attempts are made incrementally, starting from the newest key and moving backward 
         // through the sequence.
 
-        if (((new Date().getTime() - this.#_encryptionRotate.getTime()) / 1000 / 60)  > 5) {
+        if (((new Date().getTime() - this.#_encryptionRotate.getTime()) / 1000 / 60) > 5) {
             this.#_encryptionRotate = new Date();
             this.#_encryptionKeys.push(randomBytes(32))
             this.#_encryptionIvs.push(randomBytes(16))
@@ -70,13 +70,13 @@ module.exports = class captcha implements Captcha {
 
                 let usedDirectionsSet = new Set();
                 let availableDirections = [];
-                
+
                 for (let historyObject of history) {
                     if (historyObject.colour === colour.name) {
                         usedDirectionsSet.add(historyObject.direction);
                     }
                 }
-                
+
                 for (let direction of Object.values(object.directions)) {
                     if (!usedDirectionsSet.has(direction.name)) {
                         availableDirections.push(direction);

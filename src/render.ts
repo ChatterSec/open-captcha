@@ -4,8 +4,6 @@ import { addAlpha } from './utils';
 import { ObjectData } from './interface';
 import { generateImage } from './filter';
 
-// https://github.com/NotReeceHarris/open-captcha-four
-
 const { Scene } = require('./three/Scene.js');
 const { OBJLoader } = require('./three/loaders/OBJLoader.js');
 const { MTLLoader } = require('./three/loaders/MTLLoader.js');
@@ -75,18 +73,18 @@ export default (object: ObjectData) => new Promise(async (resolve, reject) => {
 
         render(object, (buffer: Buffer) => {
             sharp(background)
-            .composite([
-                { input: buffer, blend: 'over' },
-                { input: overlay, blend: 'over'}
-            ])
-            .toBuffer()
-            .then((data) => {
-                resolve(data);
-            })
-            .catch((error) => {
-                reject(error);
-            });
-        }) 
+                .composite([
+                    { input: buffer, blend: 'over' },
+                    { input: overlay, blend: 'over' }
+                ])
+                .toBuffer()
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        })
     } catch (error) {
         reject(error);
     }

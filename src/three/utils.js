@@ -17,17 +17,13 @@ function arrayMin( array ) {
 function arrayMax( array ) {
 
 	if ( array.length === 0 ) return - Infinity;
-
 	let max = array[ 0 ];
 
 	for ( let i = 1, l = array.length; i < l; ++ i ) {
-
 		if ( array[ i ] > max ) max = array[ i ];
-
 	}
 
 	return max;
-
 }
 
 function arrayNeedsUint32( array ) {
@@ -35,13 +31,10 @@ function arrayNeedsUint32( array ) {
 	// assumes larger values usually on last
 
 	for ( let i = array.length - 1; i >= 0; -- i ) {
-
 		if ( array[ i ] >= 65535 ) return true; // account for PRIMITIVE_RESTART_FIXED_INDEX, #24565
-
 	}
 
 	return false;
-
 }
 
 const TYPED_ARRAYS = {

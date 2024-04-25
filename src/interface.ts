@@ -47,21 +47,21 @@ interface canvasType {
 interface Captcha {
     generate: () => Promise<{
         anwser: {
-            model: string, 
-            colour: string, 
-            direction: string, 
+            model: string,
+            colour: string,
+            direction: string,
             token: string
         },
         images: {
-            base64: string, 
+            base64: string,
             token: string
         }[]
     }> | any
 }
 
-export { 
-    ObjectData, 
-    MtlCoefficients, 
-    canvasType, 
+export {
+    ObjectData,
+    MtlCoefficients,
+    canvasType,
     Captcha
 }

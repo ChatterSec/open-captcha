@@ -3,7 +3,7 @@ import { MtlCoefficients } from './interface';
 
 function rgbToMtlCoefficients(r: number, g: number, b: number): MtlCoefficients {
     const k = [r / 255, g / 255, b / 255]
-	return { Ka: k, Kd: k, Ks: k, Ke: k }
+    return { Ka: k, Kd: k, Ks: k, Ke: k }
 }
 
 async function addAlpha(buffer: Buffer, alpha: number): Promise<Buffer> {
@@ -26,8 +26,8 @@ function rSelect(array: any[]) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
-export { 
-    rgbToMtlCoefficients, 
+export {
+    rgbToMtlCoefficients,
     addAlpha,
     rSelect
 }

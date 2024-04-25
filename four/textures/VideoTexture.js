@@ -3,9 +3,9 @@ const { Texture } = require('./Texture.js');
 
 class VideoTexture extends Texture {
 
-	constructor( video, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy ) {
+	constructor(video, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy) {
 
-		super( video, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy );
+		super(video, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy);
 
 		this.isVideoTexture = true;
 
@@ -19,13 +19,13 @@ class VideoTexture extends Texture {
 		function updateVideo() {
 
 			scope.needsUpdate = true;
-			video.requestVideoFrameCallback( updateVideo );
+			video.requestVideoFrameCallback(updateVideo);
 
 		}
 
-		if ( 'requestVideoFrameCallback' in video ) {
+		if ('requestVideoFrameCallback' in video) {
 
-			video.requestVideoFrameCallback( updateVideo );
+			video.requestVideoFrameCallback(updateVideo);
 
 		}
 
@@ -33,7 +33,7 @@ class VideoTexture extends Texture {
 
 	clone() {
 
-		return new this.constructor( this.image ).copy( this );
+		return new this.constructor(this.image).copy(this);
 
 	}
 
@@ -42,7 +42,7 @@ class VideoTexture extends Texture {
 		const video = this.image;
 		const hasVideoFrameCallback = 'requestVideoFrameCallback' in video;
 
-		if ( hasVideoFrameCallback === false && video.readyState >= video.HAVE_CURRENT_DATA ) {
+		if (hasVideoFrameCallback === false && video.readyState >= video.HAVE_CURRENT_DATA) {
 
 			this.needsUpdate = true;
 

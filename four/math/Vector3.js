@@ -1,4 +1,4 @@
-const MathUtils = require('./MathUtils.js');
+
 const { Quaternion } = require('./Quaternion.js');
 
 class Vector3 {
@@ -520,19 +520,7 @@ class Vector3 {
 
 	}
 
-	angleTo( v ) {
 
-		const denominator = Math.sqrt( this.lengthSq() * v.lengthSq() );
-
-		if ( denominator === 0 ) return Math.PI / 2;
-
-		const theta = this.dot( v ) / denominator;
-
-		// clamp, to handle numerical problems
-
-		return Math.acos( MathUtils.clamp( theta, - 1, 1 ) );
-
-	}
 
 	distanceTo( v ) {
 

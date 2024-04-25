@@ -161,8 +161,6 @@ class ObjectLoader extends Loader {
 
 		this.bindSkeletons( object, skeletons );
 
-		//
-
 		if ( onLoad !== undefined ) {
 
 			let hasImages = false;

@@ -1,19 +1,13 @@
-const {
-	Color,
-	FileLoader,
-	FrontSide,
-	Loader,
-	LoaderUtils,
-	MeshPhongMaterial,
-	RepeatWrapping,
-	TextureLoader,
-	Vector2,
-	SRGBColorSpace
-} = require('../Four');
 
-/**
- * Loads a Wavefront .mtl file specifying materials
- */
+
+const { Color } = require('../math/Color.js');
+const { FileLoader } = require('../loaders/FileLoader.js');
+const { Loader } = require('../loaders/Loader.js');
+const { LoaderUtils } = require('../loaders/LoaderUtils.js');
+const { MeshPhongMaterial } = require('../materials/MeshPhongMaterial.js');
+const { TextureLoader } = require('../loaders/TextureLoader.js');
+const { Vector2 } = require('../math/Vector2.js');
+const { RepeatWrapping, FrontSide, SRGBColorSpace } = require('../constants.js');
 
 class MTLLoader extends Loader {
 

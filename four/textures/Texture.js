@@ -13,7 +13,6 @@ const {
 	NoColorSpace,
 	LinearEncoding
 } = require('../constants.js');
-const MathUtils = require('../math/MathUtils.js');
 const { Vector2 } = require('../math/Vector2.js');
 const { Matrix3 } = require('../math/Matrix3.js');
 const { Source } = require('./Source.js');
@@ -23,19 +22,18 @@ let _textureId = 0;
 
 class Texture extends EventDispatcher {
 
-	constructor( image = Texture.DEFAULT_IMAGE, mapping = Texture.DEFAULT_MAPPING, wrapS = ClampToEdgeWrapping, wrapT = ClampToEdgeWrapping, magFilter = LinearFilter, minFilter = LinearMipmapLinearFilter, format = RGBAFormat, type = UnsignedByteType, anisotropy = Texture.DEFAULT_ANISOTROPY, colorSpace = NoColorSpace ) {
+	constructor(image = Texture.DEFAULT_IMAGE, mapping = Texture.DEFAULT_MAPPING, wrapS = ClampToEdgeWrapping, wrapT = ClampToEdgeWrapping, magFilter = LinearFilter, minFilter = LinearMipmapLinearFilter, format = RGBAFormat, type = UnsignedByteType, anisotropy = Texture.DEFAULT_ANISOTROPY, colorSpace = NoColorSpace) {
 
 		super();
 
 		this.isTexture = true;
 
-		Object.defineProperty( this, 'id', { value: _textureId ++ } );
+		Object.defineProperty(this, 'id', { value: _textureId++ });
 
-		this.uuid = MathUtils.generateUUID();
 
 		this.name = '';
 
-		this.source = new Source( image );
+		this.source = new Source(image);
 		this.mipmaps = [];
 
 		this.mapping = mapping;
@@ -53,9 +51,9 @@ class Texture extends EventDispatcher {
 		this.internalFormat = null;
 		this.type = type;
 
-		this.offset = new Vector2( 0, 0 );
-		this.repeat = new Vector2( 1, 1 );
-		this.center = new Vector2( 0, 0 );
+		this.offset = new Vector2(0, 0);
+		this.repeat = new Vector2(1, 1);
+		this.center = new Vector2(0, 0);
 		this.rotation = 0;
 
 		this.matrixAutoUpdate = true;
@@ -66,13 +64,13 @@ class Texture extends EventDispatcher {
 		this.flipY = true;
 		this.unpackAlignment = 4;	// valid values: 1, 2, 4, 8 (see http://www.khronos.org/opengles/sdk/docs/man/xhtml/glPixelStorei.xml)
 
-		if ( typeof colorSpace === 'string' ) {
+		if (typeof colorSpace === 'string') {
 
 			this.colorSpace = colorSpace;
 
 		} else { // @deprecated, r152
 
-			warnOnce( 'THREE.Texture: Property .encoding has been replaced by .colorSpace.' );
+			warnOnce('THREE.Texture: Property .encoding has been replaced by .colorSpace.');
 			this.colorSpace = colorSpace === sRGBEncoding ? SRGBColorSpace : NoColorSpace;
 
 		}
@@ -94,7 +92,7 @@ class Texture extends EventDispatcher {
 
 	}
 
-	set image( value = null ) {
+	set image(value = null) {
 
 		this.source.data = value;
 
@@ -102,22 +100,22 @@ class Texture extends EventDispatcher {
 
 	updateMatrix() {
 
-		this.matrix.setUvTransform( this.offset.x, this.offset.y, this.repeat.x, this.repeat.y, this.rotation, this.center.x, this.center.y );
+		this.matrix.setUvTransform(this.offset.x, this.offset.y, this.repeat.x, this.repeat.y, this.rotation, this.center.x, this.center.y);
 
 	}
 
 	clone() {
 
-		return new this.constructor().copy( this );
+		return new this.constructor().copy(this);
 
 	}
 
-	copy( source ) {
+	copy(source) {
 
 		this.name = source.name;
 
 		this.source = source.source;
-		this.mipmaps = source.mipmaps.slice( 0 );
+		this.mipmaps = source.mipmaps.slice(0);
 
 		this.mapping = source.mapping;
 		this.channel = source.channel;
@@ -134,13 +132,13 @@ class Texture extends EventDispatcher {
 		this.internalFormat = source.internalFormat;
 		this.type = source.type;
 
-		this.offset.copy( source.offset );
-		this.repeat.copy( source.repeat );
-		this.center.copy( source.center );
+		this.offset.copy(source.offset);
+		this.repeat.copy(source.repeat);
+		this.center.copy(source.center);
 		this.rotation = source.rotation;
 
 		this.matrixAutoUpdate = source.matrixAutoUpdate;
-		this.matrix.copy( source.matrix );
+		this.matrix.copy(source.matrix);
 
 		this.generateMipmaps = source.generateMipmaps;
 		this.premultiplyAlpha = source.premultiplyAlpha;
@@ -148,7 +146,7 @@ class Texture extends EventDispatcher {
 		this.unpackAlignment = source.unpackAlignment;
 		this.colorSpace = source.colorSpace;
 
-		this.userData = JSON.parse( JSON.stringify( source.userData ) );
+		this.userData = JSON.parse(JSON.stringify(source.userData));
 
 		this.needsUpdate = true;
 
@@ -156,13 +154,13 @@ class Texture extends EventDispatcher {
 
 	}
 
-	toJSON( meta ) {
+	toJSON(meta) {
 
-		const isRootObject = ( meta === undefined || typeof meta === 'string' );
+		const isRootObject = (meta === undefined || typeof meta === 'string');
 
-		if ( ! isRootObject && meta.textures[ this.uuid ] !== undefined ) {
+		if (!isRootObject && meta.textures[this.uuid] !== undefined) {
 
-			return meta.textures[ this.uuid ];
+			return meta.textures[this.uuid];
 
 		}
 
@@ -177,17 +175,17 @@ class Texture extends EventDispatcher {
 			uuid: this.uuid,
 			name: this.name,
 
-			image: this.source.toJSON( meta ).uuid,
+			image: this.source.toJSON(meta).uuid,
 
 			mapping: this.mapping,
 			channel: this.channel,
 
-			repeat: [ this.repeat.x, this.repeat.y ],
-			offset: [ this.offset.x, this.offset.y ],
-			center: [ this.center.x, this.center.y ],
+			repeat: [this.repeat.x, this.repeat.y],
+			offset: [this.offset.x, this.offset.y],
+			center: [this.center.x, this.center.y],
 			rotation: this.rotation,
 
-			wrap: [ this.wrapS, this.wrapT ],
+			wrap: [this.wrapS, this.wrapT],
 
 			format: this.format,
 			internalFormat: this.internalFormat,
@@ -206,11 +204,11 @@ class Texture extends EventDispatcher {
 
 		};
 
-		if ( Object.keys( this.userData ).length > 0 ) output.userData = this.userData;
+		if (Object.keys(this.userData).length > 0) output.userData = this.userData;
 
-		if ( ! isRootObject ) {
+		if (!isRootObject) {
 
-			meta.textures[ this.uuid ] = output;
+			meta.textures[this.uuid] = output;
 
 		}
 
@@ -220,23 +218,23 @@ class Texture extends EventDispatcher {
 
 	dispose() {
 
-		this.dispatchEvent( { type: 'dispose' } );
+		this.dispatchEvent({ type: 'dispose' });
 
 	}
 
-	transformUv( uv ) {
+	transformUv(uv) {
 
-		if ( this.mapping !== UVMapping ) return uv;
+		if (this.mapping !== UVMapping) return uv;
 
-		uv.applyMatrix3( this.matrix );
+		uv.applyMatrix3(this.matrix);
 
-		if ( uv.x < 0 || uv.x > 1 ) {
+		if (uv.x < 0 || uv.x > 1) {
 
-			switch ( this.wrapS ) {
+			switch (this.wrapS) {
 
 				case RepeatWrapping:
 
-					uv.x = uv.x - Math.floor( uv.x );
+					uv.x = uv.x - Math.floor(uv.x);
 					break;
 
 				case ClampToEdgeWrapping:
@@ -246,13 +244,13 @@ class Texture extends EventDispatcher {
 
 				case MirroredRepeatWrapping:
 
-					if ( Math.abs( Math.floor( uv.x ) % 2 ) === 1 ) {
+					if (Math.abs(Math.floor(uv.x) % 2) === 1) {
 
-						uv.x = Math.ceil( uv.x ) - uv.x;
+						uv.x = Math.ceil(uv.x) - uv.x;
 
 					} else {
 
-						uv.x = uv.x - Math.floor( uv.x );
+						uv.x = uv.x - Math.floor(uv.x);
 
 					}
 
@@ -262,13 +260,13 @@ class Texture extends EventDispatcher {
 
 		}
 
-		if ( uv.y < 0 || uv.y > 1 ) {
+		if (uv.y < 0 || uv.y > 1) {
 
-			switch ( this.wrapT ) {
+			switch (this.wrapT) {
 
 				case RepeatWrapping:
 
-					uv.y = uv.y - Math.floor( uv.y );
+					uv.y = uv.y - Math.floor(uv.y);
 					break;
 
 				case ClampToEdgeWrapping:
@@ -278,13 +276,13 @@ class Texture extends EventDispatcher {
 
 				case MirroredRepeatWrapping:
 
-					if ( Math.abs( Math.floor( uv.y ) % 2 ) === 1 ) {
+					if (Math.abs(Math.floor(uv.y) % 2) === 1) {
 
-						uv.y = Math.ceil( uv.y ) - uv.y;
+						uv.y = Math.ceil(uv.y) - uv.y;
 
 					} else {
 
-						uv.y = uv.y - Math.floor( uv.y );
+						uv.y = uv.y - Math.floor(uv.y);
 
 					}
 
@@ -294,7 +292,7 @@ class Texture extends EventDispatcher {
 
 		}
 
-		if ( this.flipY ) {
+		if (this.flipY) {
 
 			uv.y = 1 - uv.y;
 
@@ -304,11 +302,11 @@ class Texture extends EventDispatcher {
 
 	}
 
-	set needsUpdate( value ) {
+	set needsUpdate(value) {
 
-		if ( value === true ) {
+		if (value === true) {
 
-			this.version ++;
+			this.version++;
 			this.source.needsUpdate = true;
 
 		}
@@ -317,14 +315,14 @@ class Texture extends EventDispatcher {
 
 	get encoding() { // @deprecated, r152
 
-		warnOnce( 'THREE.Texture: Property .encoding has been replaced by .colorSpace.' );
+		warnOnce('THREE.Texture: Property .encoding has been replaced by .colorSpace.');
 		return this.colorSpace === SRGBColorSpace ? sRGBEncoding : LinearEncoding;
 
 	}
 
-	set encoding( encoding ) { // @deprecated, r152
+	set encoding(encoding) { // @deprecated, r152
 
-		warnOnce( 'THREE.Texture: Property .encoding has been replaced by .colorSpace.' );
+		warnOnce('THREE.Texture: Property .encoding has been replaced by .colorSpace.');
 		this.colorSpace = encoding === sRGBEncoding ? SRGBColorSpace : NoColorSpace;
 
 	}

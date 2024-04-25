@@ -1,19 +1,17 @@
-const {
-	BufferGeometry,
-	FileLoader,
-	Float32BufferAttribute,
-	Group,
-	LineBasicMaterial,
-	LineSegments,
-	Loader,
-	Material,
-	Mesh,
-	MeshPhongMaterial,
-	Points,
-	PointsMaterial,
-	Vector3,
-	Color
-} = require('../Four');
+const { BufferGeometry } = require('../core/BufferGeometry.js');
+const { FileLoader } = require('../loaders/FileLoader.js');
+const { Float32BufferAttribute } = require('../core/BufferAttribute.js');
+const { Group } = require('../objects/Group.js');
+const { LineBasicMaterial } = require('../materials/LineBasicMaterial.js');
+const { LineSegments } = require('../objects/LineSegments.js');
+const { Loader } = require('../loaders/Loader.js');
+const { Material } = require('../materials/Material.js');
+const { Mesh } = require('../objects/Mesh.js');
+const { MeshPhongMaterial } = require('../materials/MeshPhongMaterial.js');
+const { Points } = require('../objects/Points.js');
+const { PointsMaterial } = require('../materials/PointsMaterial.js');
+const { Vector3 } = require('../math/Vector3.js');
+const { Color } = require('../math/Color.js');
 
 // o object_name | g group_name
 const _object_pattern = /^[og]\s*(.+)?/;

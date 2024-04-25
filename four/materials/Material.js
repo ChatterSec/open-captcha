@@ -1,8 +1,6 @@
 const { Color } = require('../math/Color.js');
 const { EventDispatcher } = require('../core/EventDispatcher.js');
 const { FrontSide, NormalBlending, LessEqualDepth, AddEquation, OneMinusSrcAlphaFactor, SrcAlphaFactor, AlwaysStencilFunc, KeepStencilOp } = require('../constants.js');
-const MathUtils = require('../math/MathUtils.js');
-
 let _materialId = 0;
 
 class Material extends EventDispatcher {
@@ -15,7 +13,7 @@ class Material extends EventDispatcher {
 
 		Object.defineProperty( this, 'id', { value: _materialId ++ } );
 
-		this.uuid = MathUtils.generateUUID();
+		
 
 		this.name = '';
 		this.type = 'Material';

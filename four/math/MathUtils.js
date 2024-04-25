@@ -310,7 +310,6 @@ function normalize( value, array ) {
 const MathUtils = {
 	DEG2RAD: DEG2RAD,
 	RAD2DEG: RAD2DEG,
-	generateUUID: generateUUID,
 	clamp: clamp,
 	euclideanModulo: euclideanModulo,
 	mapLinear: mapLinear,
@@ -337,7 +336,6 @@ const MathUtils = {
 module.exports = {
 	DEG2RAD,
 	RAD2DEG,
-	generateUUID,
 	clamp,
 	euclideanModulo,
 	mapLinear,

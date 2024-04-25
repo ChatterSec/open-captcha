@@ -6,7 +6,7 @@ import { generateImage } from './filter';
 
 // https://github.com/NotReeceHarris/open-captcha-four
 
-const { Scene } = require('../../four/scenes/Scene.js');
+const { Scene } = require('../../four/Scene.js');
 const { OBJLoader } = require('../../four/loaders/OBJLoader.js');
 const { MTLLoader } = require('../../four/loaders/MTLLoader.js');
 const { PointLight } = require('../../four/lights/PointLight.js');

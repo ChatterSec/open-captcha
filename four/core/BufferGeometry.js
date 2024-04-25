@@ -29,8 +29,6 @@ class BufferGeometry extends EventDispatcher {
 
 		Object.defineProperty( this, 'id', { value: _id ++ } );
 
-		this.uuid = MathUtils.generateUUID();
-
 		this.name = '';
 		this.type = 'BufferGeometry';
 

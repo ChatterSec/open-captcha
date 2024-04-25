@@ -1,6 +1,11 @@
 const { Quaternion } = require('./Quaternion.js');
 const { Matrix4 } = require('./Matrix4.js');
-const { clamp } = require('./MathUtils.js');
+
+function clamp( value, min, max ) {
+
+	return Math.max( min, Math.min( max, value ) );
+
+}
 
 const _matrix = /*@__PURE__*/ new Matrix4();
 const _quaternion = /*@__PURE__*/ new Quaternion();

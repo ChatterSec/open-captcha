@@ -1,4 +1,4 @@
-const MathUtils = require('./MathUtils.js');
+
 
 class Quaternion {
 
@@ -392,11 +392,7 @@ class Quaternion {
 
 	}
 
-	angleTo( q ) {
-
-		return 2 * Math.acos( Math.abs( MathUtils.clamp( this.dot( q ), - 1, 1 ) ) );
-
-	}
+	
 
 	rotateTowards( q, step ) {
 

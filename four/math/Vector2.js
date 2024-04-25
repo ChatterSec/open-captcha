@@ -1,4 +1,8 @@
-const MathUtils = require('./MathUtils.js');
+function clamp( value, min, max ) {
+
+	return Math.max( min, Math.min( max, value ) );
+
+}
 
 class Vector2 {
 
@@ -365,7 +369,7 @@ class Vector2 {
 
 		// clamp, to handle numerical problems
 
-		return Math.acos( MathUtils.clamp( theta, - 1, 1 ) );
+		return Math.acos( clamp( theta, - 1, 1 ) );
 
 	}
 

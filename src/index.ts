@@ -1,4 +1,4 @@
-import objects from '../models/objects.json';
+import default_objects from '../models/objects.json';
 
 import Render from './render';
 import { randomBytes } from "crypto";
@@ -6,19 +6,28 @@ import { decrypt, encrypt } from "./cryptography";
 import { rgbToMtlCoefficients, rSelect } from "./utils";
 import { ObjectData, MtlCoefficients, Captcha } from "./interface";
 
-// Export the captcha class as a module
-module.exports = class captcha implements Captcha {
-    #_encryptionKeys: Buffer[];
-    #_encryptionIvs: Buffer[];
-    #_encryptionRotate: Date;
+// Export the captcha class as a module.
 
-    constructor() {
+module.exports = class implements Captcha {
+    #_keys: Buffer[];
+    #_ivs: Buffer[];
+    #_rotate: Date;
+    #_objects: ObjectData[];
+
+    constructor(objects: { [key: string]: ObjectData }) {
         // Generate encryption random key and iv, this approach
         // generates a new key and iv for every instance of the class.
 
-        this.#_encryptionKeys = [randomBytes(32)];
-        this.#_encryptionIvs = [randomBytes(16)];
-        this.#_encryptionRotate = new Date();
+        this.#_keys = [randomBytes(32)];
+        this.#_ivs = [randomBytes(16)];
+        this.#_rotate = new Date();
+
+        // Merge the default objects with the objects passed to the constructor.
+
+        this.#_objects = Object.values({
+            ...default_objects,
+            ...objects
+        }) as ObjectData[];
     }
 
     async generate() {
@@ -31,14 +40,14 @@ module.exports = class captcha implements Captcha {
         // attempts are made incrementally, starting from the newest key and moving backward 
         // through the sequence.
 
-        if (((new Date().getTime() - this.#_encryptionRotate.getTime()) / 1000 / 60) > 5) {
-            this.#_encryptionRotate = new Date();
-            this.#_encryptionKeys.push(randomBytes(32))
-            this.#_encryptionIvs.push(randomBytes(16))
+        if (((new Date().getTime() - this.#_rotate.getTime()) / 1000 / 60) > 5) {
+            this.#_rotate = new Date();
+            this.#_keys.push(randomBytes(32))
+            this.#_ivs.push(randomBytes(16))
 
-            if (this.#_encryptionKeys.length > 10) {
-                delete this.#_encryptionKeys[0]
-                delete this.#_encryptionIvs[0]
+            if (this.#_keys.length > 10) {
+                delete this.#_keys[0]
+                delete this.#_ivs[0]
             }
         }
 
@@ -48,10 +57,8 @@ module.exports = class captcha implements Captcha {
 
         const history = [] as { model: string, colour: string, direction: string }[];
 
-        const options = await Promise.all(Array.from({ length: 6 }, () => {
-            return new Promise(async (res): Promise<any> => {
-                // Select a random model from the models.json, this can be any model.
-                let object = Object.assign({}, rSelect(Object.values(objects))) as ObjectData;
+        const options = await Promise.all(Array.from({ length: 6 }, () => new Promise(async (res): Promise<any> => {
+                let object = Object.assign({}, rSelect(this.#_objects)) as ObjectData; // Select a random model.
 
                 // Select the least used colour for this model, this is to make sure that
                 // each model doesnt use the same colour every time. This also fixes the 
@@ -79,30 +86,35 @@ module.exports = class captcha implements Captcha {
                 let colour = object.colours.filter((c) => c.name === Object.keys(usedColoursMap).reduce((a, b) => usedColoursMap[a] < usedColoursMap[b] ? a : b))[0];
                 object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b) as MtlCoefficients;
 
-                // Make sure each image is unique, they can have the same colour and model,
-                // and direction however a model with a colour and direction that has already
-                // been used cannot be used again. for example if we have a blue car facing foward
-                // we can have a red car facing foward but we cannot have a blue car facing foward again
-                // that being said we can still have a blue car facing left, right, or back.
+                // Make sure each image is unique, they can have the same model and direction
+                // however a model with a colour and direction that has already been used cannot be
+                // used again. for example if we have a blue car facing foward we can have a red car facing
+                // foward but we cannot have a blue car facing foward again that being said we can
+                // still have a blue car facing left, right, or back.
 
                 let usedDirectionsSet = new Set();
                 let availableDirections = [];
 
-                for (let historyObject of history) {
+                const historyLength = history.length;
+                for (let i = 0; i < historyLength; i++) {
+                    const historyObject = history[i];
                     if (historyObject.colour === colour.name) {
                         usedDirectionsSet.add(historyObject.direction);
                     }
                 }
 
-                for (let direction of Object.values(object.directions)) {
+                const directions = Object.values(object.directions);
+                const directionsLength = directions.length;
+                for (let i = 0; i < directionsLength; i++) {
+                    const direction = directions[i];
+
                     if (!usedDirectionsSet.has(direction.name)) {
                         availableDirections.push(direction);
                     }
                 }
 
                 if (availableDirections.length === 0) {
-                    // We have run out of unique directions for this colour, so we need to
-                    // select a new colour and reset the available directions.
+                    // We have run out of unique directions for this colour.
                     new Error('No available directions for this colour');
                 }
 
@@ -116,9 +128,12 @@ module.exports = class captcha implements Captcha {
                     "x": Math.random() * (object.rotation_range.x.max - object.rotation_range.x.min) + object.rotation_range.x.min
                 }
 
+                // Add the current model, colour, and direction to the history so we can
+                // make sure we dont use the same model, colour, and direction again.
+
                 history.push({ model: object.name, colour: colour.name, direction: direction.name });
 
-                res({
+                return res({
                     model: object.name,
                     colour: colour.name,
                     direction: direction.name,
@@ -126,7 +141,7 @@ module.exports = class captcha implements Captcha {
                     token: randomBytes(12).toString('hex')
                 })
             })
-        })) as {
+        )) as {
             model: string,
             colour: string,
             direction: string,
@@ -140,20 +155,23 @@ module.exports = class captcha implements Captcha {
         // and compare it to theselected token and if its a match then the user is not a bot.
 
         const selected = rSelect(options);
-        const anwser = await encrypt(selected.token, this.#_encryptionKeys, this.#_encryptionIvs);
+        const anwser = await encrypt(selected.token, this.#_keys, this.#_ivs);
 
         if (!anwser) {
             throw new Error('Failed to encrypt answer');
         }
 
+        // Parse the images object to a format that can be sent to the client.
+
+        const images = options.map((option) => {
+            return {
+                base64: 'data:image/png;base64,' + option.image.toString('base64').replace(/(\r\n|\n|\r)/gm, ""), // Add the starting padding to the base64 so the frontend doesnt have to.
+                token: option.token
+            }
+        })
+
         return {
-            "images": options.map((option) => {
-                // Add the starting padding to the base64 so the frontend doesnt have to.
-                return {
-                    base64: 'data:image/png;base64,' + option.image.toString('base64').replace(/(\r\n|\n|\r)/gm, ""),
-                    token: option.token
-                }
-            }),
+            "images": images,
             "anwser": {
                 "model": selected.model,
                 "colour": selected.colour,
@@ -164,7 +182,7 @@ module.exports = class captcha implements Captcha {
     }
 
     async verify(token: string, anwserToken: string) {
-        const decryptedToken = await decrypt(anwserToken, this.#_encryptionKeys, this.#_encryptionIvs);
+        const decryptedToken = await decrypt(anwserToken, this.#_keys, this.#_ivs);
 
         if (!decryptedToken) {
             throw new Error('Failed to decrypt token');

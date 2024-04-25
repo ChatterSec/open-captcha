@@ -12,8 +12,8 @@ To benchmark yourself run the script `npm run benchmark`, please consider sharin
 
 version | os | cpu | gpu | runs | avg generation time
 --- | --- | --- | --- | --- | ---
-0.1.x-serverRendering | `Linux Lab 5.15.0-94-generic #104-Ubuntu SMP Tue Jan 9 15:25:40 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux` | `11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz` | `TigerLake-LP GT2 [Iris Xe Graphics]` | 500 | 350.41 /ms
-0.1.x-serverRendering | `Windows 10 Home 22H2` | `AMD Ryzen 7 3700X 8-Core Processor 3.60 GHz` | `NVIDIA GeForce RTX 3060 TI` | 500 | 654.54 / ms
+0.1.x-serverRendering | `Linux 5.15.0-94-generic #104-Ubuntu 2024 x86_64 x86_64 x86_64 GNU/Linux` | `11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz` | `TigerLake-LP GT2 [Iris Xe Graphics]` | 500 | 350.41 /ms
+0.1.x-serverRendering | `Windows 10 Home 22H2` | `AMD Ryzen 7 3700X 8-Core Processor 3.60 GHz` | `NVIDIA GeForce RTX 3060 TI` | 500 | 639.95 / ms
 
 ## Setup Guide & Installation Steps
 

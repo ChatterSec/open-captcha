@@ -6,12 +6,12 @@ import { generateImage } from './filter';
 
 // https://github.com/NotReeceHarris/open-captcha-four
 
-const { Scene } = require('../../four/Scene.js');
-const { OBJLoader } = require('../../four/loaders/OBJLoader.js');
-const { MTLLoader } = require('../../four/loaders/MTLLoader.js');
-const { PointLight } = require('../../four/lights/PointLight.js');
-const { WebGL1Renderer } = require('../../four/renderers/WebGL1Renderer.js');
-const { PerspectiveCamera } = require('../../four/cameras/PerspectiveCamera.js');
+const { Scene } = require('./three/Scene.js');
+const { OBJLoader } = require('./three/loaders/OBJLoader.js');
+const { MTLLoader } = require('./three/loaders/MTLLoader.js');
+const { PointLight } = require('./three/lights/PointLight.js');
+const { WebGL1Renderer } = require('./three/renderers/WebGL1Renderer.js');
+const { PerspectiveCamera } = require('./three/cameras/PerspectiveCamera.js');
 
 // You can scale up the image however the higher the scale the more memory it will use
 // and the longer it will take to render plus the quality will be better meaning image

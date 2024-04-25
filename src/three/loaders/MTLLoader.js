@@ -1,11 +1,11 @@
 
 
 const { Color } = require('../math/Color.js');
-const { FileLoader } = require('../loaders/FileLoader.js');
-const { Loader } = require('../loaders/Loader.js');
-const { LoaderUtils } = require('../loaders/LoaderUtils.js');
+const { FileLoader } = require('./FileLoader.js');
+const { Loader } = require('./Loader.js');
+const { LoaderUtils } = require('./LoaderUtils.js');
 const { MeshPhongMaterial } = require('../materials/MeshPhongMaterial.js');
-const { TextureLoader } = require('../loaders/TextureLoader.js');
+const { TextureLoader } = require('./TextureLoader.js');
 const { Vector2 } = require('../math/Vector2.js');
 const { RepeatWrapping, FrontSide, SRGBColorSpace } = require('../constants.js');
 

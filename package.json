@@ -17,7 +17,7 @@
   "scripts": {
     "test": "jest --config=jest.json --verbose",
     "benchmark": "node ./tests/benchmark.js",
-    "build": "rimraf dist && tsc -p tsconfig.json"
+    "build": "rimraf dist && tsc -p tsconfig.json && copyfiles -u 1 src/three/* src/three/**/* src/three/**/**/* src/three/**/**/**/* dist/src"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
@@ -26,13 +26,13 @@
     "@types/jsdom": "^21.1.6",
     "@types/node": "^20.11.10",
     "benchmark": "^2.1.4",
+    "copyfiles": "^2.4.1",
     "express": "^4.18.2",
     "jest": "^29.7.0",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@open-captcha/fourjs": "^1.0.0",
     "canvas": "^2.11.2",
     "gl": "^6.0.2",
     "jsdom": "^24.0.0",

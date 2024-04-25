@@ -1,10 +1,10 @@
 const { BufferGeometry } = require('../core/BufferGeometry.js');
-const { FileLoader } = require('../loaders/FileLoader.js');
+const { FileLoader } = require('./FileLoader.js');
 const { Float32BufferAttribute } = require('../core/BufferAttribute.js');
 const { Group } = require('../objects/Group.js');
 const { LineBasicMaterial } = require('../materials/LineBasicMaterial.js');
 const { LineSegments } = require('../objects/LineSegments.js');
-const { Loader } = require('../loaders/Loader.js');
+const { Loader } = require('./Loader.js');
 const { Material } = require('../materials/Material.js');
 const { Mesh } = require('../objects/Mesh.js');
 const { MeshPhongMaterial } = require('../materials/MeshPhongMaterial.js');

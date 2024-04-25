@@ -5,15 +5,20 @@ import { ObjectData } from './interface';
 import { generateImage } from './filter';
 
 // https://github.com/NotReeceHarris/open-captcha-four
-const { Scene } = require('@open-captcha/fourjs/scenes/Scene.js');
-const { OBJLoader } = require('@open-captcha/fourjs/loaders/OBJLoader.js');
-const { MTLLoader } = require('@open-captcha/fourjs/loaders/MTLLoader.js');
-const { PointLight } = require('@open-captcha/fourjs/lights/PointLight.js');
-const { WebGL1Renderer } = require('@open-captcha/fourjs/renderers/WebGL1Renderer.js');
-const { PerspectiveCamera } = require('@open-captcha/fourjs/cameras/PerspectiveCamera.js');
 
-const width = 256;
-const height = 256;
+const { Scene } = require('../../four/Scene.js');
+const { OBJLoader } = require('../../four/loaders/OBJLoader.js');
+const { MTLLoader } = require('../../four/loaders/MTLLoader.js');
+const { PointLight } = require('../../four/lights/PointLight.js');
+const { WebGL1Renderer } = require('../../four/renderers/WebGL1Renderer.js');
+const { PerspectiveCamera } = require('../../four/cameras/PerspectiveCamera.js');
+
+// You can scale up the image however the higher the scale the more memory it will use
+// and the longer it will take to render plus the quality will be better meaning image
+// recognition will be easier
+
+const width = 200;
+const height = 200;
 
 function createCamera(cameraPosition: number): any {
     const camera = new PerspectiveCamera(75, width / height, 0.1, 1000);
@@ -64,8 +69,8 @@ function render(objectData: ObjectData, callback: (buffer: Buffer) => void): voi
 
 export default (object: ObjectData) => new Promise(async (resolve, reject) => {
     try {
-        const background = generateImage(null, width, height);
-        const overlayBase = generateImage(null, width, height);
+        const background = await generateImage(null, width, height);
+        const overlayBase = await generateImage(null, width, height);
         const overlay = await addAlpha(overlayBase, 0.3);
 
         render(object, (buffer: Buffer) => {

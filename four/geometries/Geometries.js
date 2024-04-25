@@ -1,23 +1,3 @@
 module.exports = {
     ...require('./BoxGeometry.js'),
-    ...require('./CapsuleGeometry.js'),
-    ...require('./CircleGeometry.js'),
-    ...require('./ConeGeometry.js'),
-    ...require('./CylinderGeometry.js'),
-    ...require('./DodecahedronGeometry.js'),
-    ...require('./EdgesGeometry.js'),
-    ...require('./ExtrudeGeometry.js'),
-    ...require('./IcosahedronGeometry.js'),
-    ...require('./LatheGeometry.js'),
-    ...require('./OctahedronGeometry.js'),
-    ...require('./PlaneGeometry.js'),
-    ...require('./PolyhedronGeometry.js'),
-    ...require('./RingGeometry.js'),
-    ...require('./ShapeGeometry.js'),
-    ...require('./SphereGeometry.js'),
-    ...require('./TetrahedronGeometry.js'),
-    ...require('./TorusGeometry.js'),
-    ...require('./TorusKnotGeometry.js'),
-    ...require('./TubeGeometry.js'),
-    ...require('./WireframeGeometry.js')
 }

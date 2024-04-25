@@ -67,8 +67,8 @@ function render(objectData: ObjectData, callback: (buffer: Buffer) => void): voi
 
 export default (object: ObjectData) => new Promise(async (resolve, reject) => {
     try {
-        const background = await generateImage(null, width, height);
-        const overlayBase = await generateImage(null, width, height);
+        const background = await generateImage(null, width, height, 0);
+        const overlayBase = await generateImage(null, width, height, 1);
         const overlay = await addAlpha(overlayBase, 0.3);
 
         render(object, (buffer: Buffer) => {

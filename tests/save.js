@@ -1,5 +1,5 @@
 (async () => {
-    const Captcha = require('../dist/src/captcha');
+    const Captcha = require('../dist/src/index');
     const { randomBytes } = require('crypto');
     const fs = require('fs');
     const oCaptcha = new Captcha();

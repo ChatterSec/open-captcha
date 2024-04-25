@@ -1,4 +1,4 @@
-const Captcha = require('../dist/src/captcha');
+const Captcha = require('../dist/src/index');
 const oCaptcha = new Captcha();
 
 const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;

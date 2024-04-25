@@ -6,9 +6,6 @@ import { decrypt, encrypt } from "./cryptography";
 import { rgbToMtlCoefficients, rSelect } from "./utils";
 import { ObjectData, MtlCoefficients, Captcha } from "./interface";
 
-// Temporaraly force every captcha to be a car
-const selectedModel = 'car'
-
 // Export the captcha class as a module
 module.exports = class captcha implements Captcha {
     #_encryptionKeys: Buffer[];
@@ -53,12 +50,33 @@ module.exports = class captcha implements Captcha {
 
         const options = await Promise.all(Array.from({ length: 6 }, () => {
             return new Promise(async (res): Promise<any> => {
-                let object = Object.assign({}, objects[selectedModel]) as ObjectData;
+                // Select a random model from the models.json, this can be any model.
+                let object = Object.assign({}, rSelect(Object.values(objects))) as ObjectData;
 
-                // Select a random color then apply it to the model, some models have diffrent properties,
-                // so colours must be defined in the models.json.
+                // Select the least used colour for this model, this is to make sure that
+                // each model doesnt use the same colour every time. This also fixes the 
+                // issue where models with the same colour and direction are used multiple.
 
-                let colour = rSelect(Object.values(object.colours));
+                const usedColours = history.map((h) => h.colour);
+                const usedColoursMap: { [colour: string]: number } = {};
+
+                const colourLength = object.colours.length;
+                for (let i = 0; i < colourLength; i++) {
+                    const c = object.colours[i];
+                    usedColoursMap[c.name] = 0;
+                }
+
+                const usedColoursLength = usedColours.length;
+                for (let i = 0; i < usedColoursLength; i++) {
+                    const colour = usedColours[i];
+                    if (usedColoursMap[colour] !== undefined) {
+                        usedColoursMap[colour]++;
+                    } else {
+                        usedColoursMap[colour] = 1;
+                    }
+                }
+
+                let colour = object.colours.filter((c) => c.name === Object.keys(usedColoursMap).reduce((a, b) => usedColoursMap[a] < usedColoursMap[b] ? a : b))[0];
                 object.colour = rgbToMtlCoefficients(colour.r, colour.g, colour.b) as MtlCoefficients;
 
                 // Make sure each image is unique, they can have the same colour and model,
@@ -66,7 +84,6 @@ module.exports = class captcha implements Captcha {
                 // been used cannot be used again. for example if we have a blue car facing foward
                 // we can have a red car facing foward but we cannot have a blue car facing foward again
                 // that being said we can still have a blue car facing left, right, or back.
-
 
                 let usedDirectionsSet = new Set();
                 let availableDirections = [];
@@ -86,6 +103,7 @@ module.exports = class captcha implements Captcha {
                 if (availableDirections.length === 0) {
                     // We have run out of unique directions for this colour, so we need to
                     // select a new colour and reset the available directions.
+                    new Error('No available directions for this colour');
                 }
 
                 // Select a random direction then find a random point in that direction,
@@ -99,7 +117,6 @@ module.exports = class captcha implements Captcha {
                 }
 
                 history.push({ model: object.name, colour: colour.name, direction: direction.name });
-                //console.log(history, history.length)
 
                 res({
                     model: object.name,

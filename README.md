@@ -13,7 +13,7 @@ To benchmark yourself run the script `npm run benchmark`, please consider sharin
 version | os | cpu | gpu | runs | avg generation time
 --- | --- | --- | --- | --- | ---
 0.1.x-serverRendering | `Linux 5.15.0-94-generic #104-Ubuntu 2024 x86_64 x86_64 x86_64 GNU/Linux` | `11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz` | `TigerLake-LP GT2 [Iris Xe Graphics]` | 500 | 350.41 /ms
-0.1.x-serverRendering | `Windows 10 Home 22H2` | `AMD Ryzen 7 3700X 8-Core Processor 3.60 GHz` | `NVIDIA GeForce RTX 3060 TI` | 500 | 639.95 / ms
+0.1.x-serverRendering | `Windows 10 Home 22H2` | `AMD Ryzen 7 3700X 8-Core Processor 3.60 GHz` | `NVIDIA GeForce RTX 3060 TI` | 500 | 534.71 / ms
 0.1.x-serverRendering | `Windows 11 Pro 22H2` | `13th Gen Intel(R) Core(TM) i5-13420H 2.10 GHz` | `Intel(R) UHD Graphics` | 500 | 703.04 / ms
 
 ## Setup Guide & Installation Steps
@@ -59,3 +59,21 @@ sudo yum install -y gcc-c++ libXi-devel mesa-libGL-devel glew-devel pkgconfig py
 
 - [Python 3.x](https://www.python.org/)
 - [XCode](https://developer.apple.com/xcode/)
+
+
+## Contributing 
+
+All contributions are welcome ❤️, if you plan on contributing please read the [CONTRIBUTING](/CONTRIBUTING.md) and [CODE_OF_CONDUCT](/CODE_OF_CONDUCT.md) for more information.
+
+## Licensing
+
+```
+                    GNU AFFERO GENERAL PUBLIC LICENSE
+                       Version 3, 19 November 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+```
+
+For more details please read the [LICENSE](/LICENSE), To know more about the GPLA-3.0 license you can read more on the [GNU official website](https://www.gnu.org/licenses/agpl-3.0).

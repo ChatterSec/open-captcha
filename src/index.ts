@@ -31,6 +31,8 @@ module.exports = class implements Captcha {
 
         // Check if the models are valid and have the required files.
 
+        let largePolyCount = false;
+
         const objectLength = this.#_objects.length;
         for (let i = 0; i < objectLength; i++) {
             const object = this.#_objects[i];
@@ -40,7 +42,9 @@ module.exports = class implements Captcha {
                     throw new Error(`Invalid object file: ${object.obj}`);
                 }
 
+                // https://support.shapeways.com/hc/en-us/articles/360022742294-Polygon-reduction-with-MeshLab
                 if (stats.verticesCount >= 10000 || stats.facesCount >= 10000) {
+                    largePolyCount = true;
                     throw new Error(`Poly count too large: ${object.obj} (v: ${stats.verticesCount}, f: ${stats.facesCount}) [both must be below 10,000]`);
                 }
 

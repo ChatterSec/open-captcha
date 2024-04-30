@@ -3,7 +3,7 @@ import default_objects from '../models/objects.json';
 import Render from './render';
 import { randomBytes } from "crypto";
 import { decrypt, encrypt } from "./cryptography";
-import { rgbToMtlCoefficients, rSelect } from "./utils";
+import { rgbToMtlCoefficients, rSelect, objStats } from "./utils";
 import { ObjectData, MtlCoefficients, Captcha } from "./interface";
 
 // Export the captcha class as a module.
@@ -28,6 +28,29 @@ module.exports = class implements Captcha {
             ...default_objects,
             ...objects
         }) as ObjectData[];
+
+        // Check if the models are valid and have the required files.
+
+        const objectLength = this.#_objects.length;
+        for (let i = 0; i < objectLength; i++) {
+            const object = this.#_objects[i];
+
+            objStats(`models${object.obj}`).then((stats) => {
+                if (stats.verticesCount === 0 || stats.facesCount === 0) {
+                    throw new Error(`Invalid object file: ${object.obj}`);
+                }
+
+                if (stats.verticesCount >= 10000 || stats.facesCount >= 10000) {
+                    throw new Error(`Poly count too large: ${object.obj} (v: ${stats.verticesCount}, f: ${stats.facesCount}) [both must be below 10,000]`);
+                }
+
+                if (stats.verticesCount >= 2500 || stats.facesCount >= 2000) {
+                    console.warn(`\x1b[33m[!]\x1b[0m High poly object: ${object.obj} (v: ${stats.verticesCount}, f: ${stats.facesCount})`);
+                }
+            }).catch((err) => {
+                throw new Error(err);
+            });
+        }
     }
 
     async generate() {

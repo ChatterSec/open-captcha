@@ -17,7 +17,8 @@
   "scripts": {
     "test": "jest --config=jest.json --verbose",
     "benchmark": "node ./tests/benchmark.js",
-    "build": "rimraf dist && tsc -p tsconfig.json && copyfiles -u 1 src/three/* src/three/**/* src/three/**/**/* src/three/**/**/**/* dist/src"
+    "raw": "tsc -p ./tsconfig.json",
+    "build": "rimraf dist && tsc -p tsconfig.json && copyfiles -u 1 src/three/* src/three/**/* src/three/**/**/* src/three/**/**/**/* dist/src && copyfiles -u 1 models/**/* dist/models"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+      "target": "es2022",
+      "module": "commonjs",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "./dist",
+      "incremental": true,
+      "noEmitOnError": true,
+      "declaration": true,
+      "sourceMap": true,
+      "resolveJsonModule": true
+    },
+    "include": [
+      "src/**/*.ts", 
+      "models/objects.json", 
+      "src/three/cameras/CubeCamera.js", 
+      "src/three/cameras/Camera.js", 
+      "src/three/cameras/ArrayCamera.js", 
+      "src/three/constants.js", 
+      "src/three/Utils.js", 
+      "src/three/scene.js", 
+      "src/canvas.ts", 
+      "src/cryptography.ts", 
+      "src/filter.ts", 
+      "src/index.ts", 
+      "src/interface.ts", 
+      "src/render.ts", 
+      "src/utils.ts"
+    ],
+    "exclude": ["node_modules"]
+}

@@ -61,18 +61,19 @@ module.exports = class implements Captcha {
 
         // Rotate encryption keys every 5 minutes. The approach here is somewhat distinctive: 
         // to minimize memory usage, we refrain from storing every generated captcha in memory 
-        // awaiting resolution. Instead, we maintain an array of 10 keys and 10 initialization 
+        // awaiting resolution. Instead, we maintain an array of 12 keys and 12 initialization 
         // vectors (IVs). Every 5 minutes, we discard the oldest key pair and introduce a new 
         // one. Subsequently, the encryption algorithm employs the latest key, while decryption 
         // attempts are made incrementally, starting from the newest key and moving backward 
-        // through the sequence.
+        // through the sequence. 
+        // (Completly new set of keys every hour, 12 keys * 5 minutes = 60 minutes)
 
         if (((new Date().getTime() - this.#_rotate.getTime()) / 1000 / 60) > 5) {
             this.#_rotate = new Date();
             this.#_keys.push(randomBytes(32))
             this.#_ivs.push(randomBytes(16))
 
-            if (this.#_keys.length > 10) {
+            if (this.#_keys.length > 12) {
                 delete this.#_keys[0]
                 delete this.#_ivs[0]
             }

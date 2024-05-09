@@ -1,4 +1,5 @@
 .clinic/
+output/
 
 # Logs
 logs

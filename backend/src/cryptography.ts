@@ -1,9 +1,10 @@
 import { createCipheriv, createDecipheriv } from 'crypto';
 
-// Error handling implmented thanks to Danial
-// https://stackoverflow.com/a/25852077/16701094
-
 function encrypt(text: string, keys: Buffer[], ivs: Buffer[]): string | null {
+
+    // Get the last element of the keys and ivs since these are the newest keys and will,
+    // last for up to 1 hour.
+
     const key = keys[keys.length - 1];
     const iv = ivs[ivs.length - 1];
 
@@ -20,15 +21,18 @@ function encrypt(text: string, keys: Buffer[], ivs: Buffer[]): string | null {
 
 function decrypt(encryptedText: string, keys: Buffer[], ivs: Buffer[]): string | null | undefined {
 
+    const keysCount = keys.length;
+    const ivsCount = ivs.length;
+
     // Input validation to ensure we have the correct
     // amount of keys and ivs.
 
-    if (keys.length === 0 || ivs.length === 0) {
+    if (keysCount === 0 || ivsCount === 0) {
         console.error('You must supply atleast 1 key and iv');
         return null;
     }
 
-    if (keys.length !== ivs.length) {
+    if (keysCount !== ivsCount) {
         console.error('You must supply the same amount of keys as ivs');
         return null;
     }
@@ -41,7 +45,7 @@ function decrypt(encryptedText: string, keys: Buffer[], ivs: Buffer[]): string |
     keys.reverse()
     ivs.reverse()
 
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keysCount; i++) {
         const key = keys[i];
         const iv = ivs[i];
 
@@ -60,7 +64,7 @@ function decrypt(encryptedText: string, keys: Buffer[], ivs: Buffer[]): string |
         // havent decrypted it then there is an issue 
         // so just return null.
 
-        if (i === keys.length - 1) {
+        if (i === keysCount - 1) {
             return null;
         }
 

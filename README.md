@@ -8,7 +8,7 @@ open-captcha stands out from other captcha providers in a big way. Forget about 
 
 ## Benchmarking
 
-To benchmark yourself run the script `npm run benchmark`, please consider sharing your benchmark results by making a [PR](https://github.com/ChatterSec/open-captcha/pulls) to the [BENCHMARK.md](BENCHMARK.md).
+To benchmark yourself first malke sure your in the backend codebase `cd backend` then build `npm build` and finally run the script `npm run benchmark`, please consider sharing your benchmark results by making a [PR](https://github.com/ChatterSec/open-captcha/pulls) to the [BENCHMARK.md](BENCHMARK.md).
 
 version | os | cpu | gpu | runs | avg generation time
 --- | --- | --- | --- | --- | ---
@@ -18,7 +18,9 @@ version | os | cpu | gpu | runs | avg generation time
 
 ## Setup Guide & Installation Steps
 
-Unfortunately, setting up open-captcha isn't straightforward for everyone. However, in some cases, all you need to do is run the `npm install` command. Because open-captcha relies on headless image generation, which is not natively supported in Node.js, there are a few build requirements to consider.
+Unfortunately, setting up open-captcha isn't straightforward for everyone. However, in some cases, all you need to do is run the `npm install` command. 
+
+Because open-captcha relies on headless image generation, which is not natively supported in Node.js, there are a few build requirements to consider.
 
 First, ensure that you have the required dependencies listed below. Then, it's a matter of some trial and error from there. Make sure you have `python3` aliased as `python`, as some tasks may require specific permissions. You can either run them as root or configure your permissions accordingly.
 

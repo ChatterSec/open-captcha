@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es2020",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "incremental": true,
+    "noEmitOnError": true,
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src/index.ts", 
+  ],
+  "exclude": ["node_modules"]
+}

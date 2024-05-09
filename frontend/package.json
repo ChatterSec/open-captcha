@@ -10,9 +10,7 @@
   "files": [
     "README*",
     "LICENSE*",
-    "dist/**/*",
-    "models/",
-    "assets/"
+    "dist/**/*"
   ],
   "scripts": {
     "test": "jest --config=jest.json --verbose",
